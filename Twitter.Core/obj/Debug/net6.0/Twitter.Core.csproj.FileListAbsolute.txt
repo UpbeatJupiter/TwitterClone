@@ -1,0 +1,15 @@
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.Core\bin\Debug\net6.0\Twitter.Core.deps.json
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.Core\bin\Debug\net6.0\Twitter.Core.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.Core\bin\Debug\net6.0\Twitter.Core.pdb
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.Core\obj\Debug\net6.0\Twitter.Core.csproj.AssemblyReference.cache
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.Core\obj\Debug\net6.0\Twitter.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.Core\obj\Debug\net6.0\Twitter.Core.AssemblyInfoInputs.cache
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.Core\obj\Debug\net6.0\Twitter.Core.AssemblyInfo.cs
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.Core\obj\Debug\net6.0\Twitter.Core.csproj.CoreCompileInputs.cache
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.Core\obj\Debug\net6.0\Twitter.Core.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.Core\obj\Debug\net6.0\refint\Twitter.Core.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.Core\obj\Debug\net6.0\Twitter.Core.pdb
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.Core\obj\Debug\net6.0\ref\Twitter.Core.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.Core\bin\Debug\net6.0\Twitter.Data.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.Core\bin\Debug\net6.0\Twitter.Data.pdb
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.Core\obj\Debug\net6.0\Twitter.Core.csproj.CopyComplete

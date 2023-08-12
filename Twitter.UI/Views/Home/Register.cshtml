@@ -1,0 +1,43 @@
+﻿@{
+	ViewData["Title"] = "Register";
+}
+
+	<div class="d-flex justify-content-center" id="registerForm">
+		<div class="col-md-7 col-lg-5">
+			<div class="row">
+				<div class="col-12">
+					<span><i class="fa-brands fa-twitter fs-2 py-3" style="color: #1d9bf0;"></i></span>
+				</div>
+				<div class="col-12 mb-4">
+					<span>Sign up to Twitter</span>
+				</div>
+				<div class="col-12 form-group mb-4">
+					<input type="text" class="form-control" required="" placeholder="Username" id="usernameSignup">
+
+				</div>
+				<div class="col-12 form-group mb-4">
+					<input type="text" class="form-control" required="" placeholder="Name" id="nameSignup">
+
+				</div>
+				<div class="col-12 form-group mb-4">
+					<input type="text" class="form-control" required="" placeholder="Email" id="emailSignup">
+
+				</div>
+
+				<div class="col-12 form-group mb-3">
+					<input type="password" class="form-control" required="" placeholder="Password" id="passwordSignup">
+
+				</div>
+				<p class="text-left mb-4">By signing up, you agree that you accept our <a data-toggle="tab" target="_blank" href="https://twitter.com/en/tos">Terms of Service</a></p>
+				<div class="col-12 form-group mb-3">
+					<button type="submit" class="form-control btn rounded submit px-3" id="tweet" onclick="signup.userDetails()">Sign Up</button>
+				</div>
+
+			</div>
+			<div class="col-12 mt-4">
+				<p class="text-center">Already a member? <a data-toggle="tab" href="/Home/Login">Log In</a></p>
+			</div>
+
+		</div>
+
+	</div>

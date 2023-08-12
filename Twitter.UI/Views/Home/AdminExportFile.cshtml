@@ -1,0 +1,45 @@
+﻿@using NonFactors.Mvc.Grid;
+@using Twitter.Core.Dtos;
+
+@model List<UserDto>
+
+@{
+	ViewData["Title"] = "Users";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>Users</title>
+	<link href="~/css/mvc-grid/mvc-grid.css" rel="stylesheet" />
+</head>
+<body>
+	<div>
+		<a href="@(Url.Action("ExportIndex") + ViewContext.HttpContext.Request.QueryString)" class="exportButton" id="tweet">Export</a>
+		<h1>
+			Users Registered Today
+		</h1>
+	</div>
+
+	<hr />
+	<div>
+
+
+		@(Html.Grid(Model).Build(columns =>
+			{
+				columns.Add(c => c.Username).Titled("Username");
+				columns.Add(c => c.Name).Titled("Name");
+				columns.Add(c => c.Email).Titled("Email");
+				columns.Add(c => c.RegisterDate.ToString("dd/MM/yyyy")).Titled("Registeration Date");
+			})
+			.Using(GridFilterMode.Header)
+			.Empty("No data found")
+			.Pageable()
+			.Sortable()
+			)
+
+	</div>
+</body>
+</html>

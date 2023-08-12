@@ -1,0 +1,90 @@
+﻿@model Twitter.Core.Dtos.UserDto
+
+@{
+	Layout = null;
+}
+@if (ViewBag.Tweets != null)
+{
+	for (int item = 0; item < ViewBag.TweetsTotal; item++)
+	{
+		<div class="col-12">
+			<div class="row">
+				<div class="col-xs-4 col-md-2 py-2">
+					<div class="flex-shrink-0" style="width: 75%;max-width: 100px;">
+						<img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-2.webp"
+							 alt="Generic placeholder image" class="img-fluid rounded-circle">
+					</div>
+				</div>
+				<div class="col-xs-8 col-md-10 fs-4 ">
+					<div class="row">
+						<div class="col-12">
+							<div class="row">
+								<div class="col-12 col-md-8">
+									@for (int i = 0; i < ViewBag.Username.Count; i++)
+									{
+										if (ViewBag.Username[i] == ViewBag.Tweets[item].Username) // düzenle
+										{
+											<b><span>@ViewBag.Username[i]</span></b> 
+											<span>
+												<i class="fa-solid fa-circle" 
+												style="color: rgb(83, 100, 113); font-size: 25%; margin: 3%; vertical-align: middle;"></i>
+												<span id="time">@ViewBag.Tweets[item].TweetDate</span>
+											</span>
+											break;
+										}
+									}
+								</div>
+								<div class="col-6 col-md-4" style="text-align:center;">
+									@if (Context.Session.GetInt32("userId") == ViewBag.Tweets[item].UserId)
+									{
+										<span>
+											<i class="fa-solid fa-xmark fs-5 py-1" style="color: rgb(83, 100, 113);" 
+											onclick="deleteTweet.deleteTweet('@ViewBag.Tweets[item].TweetId','@ViewBag.Tweets[item].UserId')"></i>
+											</span>
+									}
+									else
+									{
+										<span><i class="fa-solid fa-ellipsis fs-5 py-1" style="color: rgb(83, 100, 113);"></i></span>
+									}
+								</div>
+							</div>
+						</div>
+						<div class="col-12">
+							<div>
+								<span>@ViewBag.Tweets[item].TweetContent</span>
+							</div>
+						</div>
+						<br />
+						<div class="col-12 m-2">
+							<div class="row" style="justify-content: space-between; align-items: flex-end;">
+								<div class="col-5">
+									<div class="row" style="flex-flow: row;">
+										<div class="col-2">
+											<span><i class="fa-regular fa-comment fs-5 py-1" style="color: rgb(83, 100, 113);"></i></span>
+										</div>
+										<div class="col-2">
+											<span><i class="fa-solid fa-retweet fs-5 py-1" style="color: rgb(83, 100, 113);"></i></span>
+										</div>
+										<div class="col-2">
+											<span><i class="fa-regular fa-heart fs-5 py-1" style="color: rgb(83, 100, 113);"></i></span>
+										</div>
+										<div class="col-2">
+											<span><i class="fa-solid fa-face-smile fs-5 py-1" style="color: rgb(83, 100, 113);"></i></span>
+										</div>
+										<div class="col-2">
+											<span><i class="fa-solid fa-arrow-up-from-bracket fs-5 py-1" style="color: rgb(83, 100, 113);"></i></span>
+										</div>
+										<div class="col-2">
+											<span></span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<hr />
+	}
+}

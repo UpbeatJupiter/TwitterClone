@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Twitter.UI.styles.css" asp-append-version="true" />
+    <link href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOGjUjzkplOb6KhU2eyrVPXtrFX77axV4e2rVbDqqlRd56hTBgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANygUS7doVF736JRpuSmU/HqqVT/7axV/+6sVf/urFX/7qxV/+2rVd3qqVRCAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADnp1MO7KtUqO2sVf/urFX/7qxV/+6sVf/urFX/7axV/OqpVGIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADkplMc66pUx+6sVf/urFX/7qxV/+6sVf/urFX/7qxV/+6sVf/tq1X856hTPQAAAAAAAAAAAAAAAAAAAAAAAAAA56hTx+2rVf/urFX/7qxV/+6sVf/urFX/7qxV/+6sVf/urFX/7qxV/+uqVN/kpVMJAAAAAAAAAAAAAAAA5KZTBuuqVI/trFX37qxV/+6sVf/urFX/7qxV/+6sVf/urFX/7qxV/+6sVf/tq1X/56dTZwAAAAAAAAAAAAAAAOeoU5ntq1X/7qxV/+6sVf/urFX/7qxV/+6sVf/urFX/7qxV/+6sVf/urFX/7qxV/+mpVM4AAAAAAAAAAN+iURLnp1P97atV/+6sVf/tq1X/7KtU/+qqVP/rqlT/7axV/+6sVf/urFX/7qxV/+6sVf/qqlT+4qRSEQAAAADfolET6KhUdu2rVfnrqlT/56hT/+SmU//ipFL/5KZT/+uqVP/urFX/7qxV/+6sVf/urFX/66pU/+SlUzYAAAAA4aNSBuioVOjpqVT/5KVT/9+iUdLdoVFu3KBRKeCjUi7pqVT/7axV/+6sVf/urFX/7qxV/+2rVf/np1NFAAAAAN+iUSnkpVP/4qRS9N6hUWzcoFEBAAAAAAAAAADeoVEX5KZT/uuqVP/trFX/7axV/+yrVP/qqVT/5aZT5d+iUSzcoFEX3qFR7NygUTAAAAAAAAAAAAAAAAAAAAAAAAAAAN+iUabkplP/56hT/+ioVP/lplP/4qRS/uCjUqneoVExAAAAANufUB0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADcoFEI3aFRi9+iUe3folHx3qFRnNygURXcoFFT3KBRJgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA//8AAMD/AADAPwAA8B8AAOAPAADABwAAwAcAAIADAACAAwAAwAMAAIcDAACfAQAAvwEAAP+HAAD//wAA//8AAA==" rel="icon" type="image/x-icon" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-none mb-3">
+            <div class="container-fluid">
+                
+               
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <!--
+    <footer class="border-top footer text-muted">
+        
+        <div class="container">
+            &copy; 2023 - Twitter.UI - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+        
+    </footer>
+    -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/bf1c643ee2.js" crossorigin="anonymous"></script>
+    @*<script src="~/js/site.js" asp-append-version="true"></script>*@
+    <script src="~/js/postTweet.js" asp-append-version="true"></script>
+    <script src="~/js/followTheme.js" asp-append-version="true"></script>
+    <script src="~/js/login.js" asp-append-version="true"></script>
+    <script src="~/js/signup.js" asp-append-version="true"></script>
+    <script src="~/js/review.js" asp-append-version="true"></script>
+    <script src="~/js/deleteTweet.js" asp-append-version="true"></script>
+
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

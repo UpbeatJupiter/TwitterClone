@@ -1,0 +1,230 @@
+span {
+    font: inherit;
+    line-height: 24px;
+    font-size: 20px;
+}
+
+#left-side-bar-text {
+    margin-left: 20px;
+}
+
+#tweet {
+    background-color: #1d9bf0;
+    color: white;
+    text-align: center;
+    
+}
+
+/*who stop follow*/
+
+#whoToFollow :root {
+    --light-bg: white;
+    --light-primary: rgb(247, 249, 250);
+    --light-secondary: rgb(240, 242, 243);
+    --light-divider: rgb(235, 237, 238);
+    --dark-bg: black;
+    --dark-primary: #15181c;
+    --dark-secondary: #2f3336;
+    --dark-divider: #2f3336;
+    --highlight-color: #e0245e;
+    font-family: 'Roboto', sans-serif;
+}
+
+#whoToFollow * {
+    box-sizing: border-box;
+}
+
+#whoToFollow html, body {
+    margin: 0;
+    height: 100%;
+    width: 100%;
+}
+
+#whoToFollow html {
+    display: table;
+}
+
+#whoToFollow body {
+    background-color: var(--background-color);
+    display: table-cell;
+    vertical-align: middle;
+    width: 100%;
+}
+
+#whoToFollow h1 {
+    font-size: 150%;
+    font-weight: 900;
+}
+
+#whoToFollow .light-theme {
+    --background-color: var(--light-bg);
+    --primary-bg: var(--light-primary);
+    --secondary-bg: var(--light-secondary);
+    --divider: var(--light-divider);
+}
+
+#whoToFollow .dark-theme {
+    --background-color: var(--dark-bg);
+    --primary-bg: var(--dark-primary);
+    --secondary-bg: var(--dark-secondary);
+    --divider: var(--dark-divider);
+    color: white !important;
+}
+
+#whoToFollow .card {
+    background-color: var(--primary-bg);
+    height: auto;
+    width: auto;
+    margin: 0 auto;
+    border-radius: 24px;
+}
+
+#whoToFollow .card-title {
+    margin: 0;
+    padding: 20px 20px 15px 20px;
+}
+
+#whoToFollow .divider {
+    display: block;
+    width: 100%;
+    border-top: 1px solid var(--secondary-bg);
+}
+
+#whoToFollow .profile {
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    padding: 3% 8%;
+    padding-bottom: 7%;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    align-content: stretch;
+    justify-items: stretch;
+    justify-content: space-between;
+}
+
+#whoToFollow .profile:hover, .show-more:hover {
+    background-color: var(--secondary-bg);
+}
+
+#whoToFollow .profile-pic {
+    display: block;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+
+#whoToFollow .profile-info {
+    padding: 0 10px;
+    flex-grow: 1;
+}
+
+#whoToFollow .display-name, .username {
+    display: block;
+}
+
+#whoToFollow .display-name {
+    font-weight: 700;
+}
+
+#whoToFollow .username {
+    color: rgb(155, 153, 153);
+}
+
+#whoToFollow .username::before {
+    content: '@';
+}
+
+#whoToFollow .follow-button {
+    background-color: black;
+    border: 1px solid var(--highlight-color);
+    border-radius: 16px;
+    color: white;
+    padding: 6px 16px;
+    outline: none;
+    font-weight: 900;
+}
+
+#whoToFollow .followed {
+    background-color: white;
+    border-color: black;
+    color: black;
+    border: 1px solid var(--highlight-color);
+    border-radius: 16px;
+    padding: 6px 16px;
+    outline: none;
+    font-weight: 900;
+}
+
+#whoToFollow .show-more {
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+    display: block;
+    padding: 15px 20px 20px 20px;
+    text-decoration: none;
+    color: var(--highlight-color);
+}
+
+#whoToFollow .show-more:focus {
+     -webkit-tap-highlight-color: transparent;
+}
+
+#whoToFollow .themer {
+    background-color: var(--primary-bg);
+    color: inherit;
+    outline: none;
+    border: none;
+    border-radius: 8px;
+    position: fixed;
+    right: 30px;
+    top: 30px;
+    padding: 8px 10px;
+}
+
+#reviewInput .col-25 {
+    float: left;
+    width: 25%;
+    margin-top: 6px;
+}
+
+#reviewInput .col-75 {
+    float: left;
+    width: 55%;
+    margin-top: 6px;
+    padding-left:0;
+}
+
+
+#reviewInput label {
+    padding: 12px 12px 12px 0;
+    display: inline-block;
+}
+
+#subject {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+input[type=submit] {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    float: right;
+}
+
+.exportButton {
+    border-radius: 8px;
+    border: none;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    padding: 9px;
+    float: right;
+}

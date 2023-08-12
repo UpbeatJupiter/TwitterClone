@@ -1,0 +1,43 @@
+﻿@model Twitter.Core.Dtos.UserDto
+
+@{
+	Layout = null;
+}
+<div id="whoToFollow">
+	<div class="card border-0" style="background-color:#f2f2f2">
+		<h1 class="card-title">Who to follow</h1>
+
+		<span class="divider"></span>
+
+		@if (ViewBag.UserList != null && ViewBag.FollowedUserList != null)
+		{
+			foreach (var users in ViewBag.UserList)
+			{
+				if (users.UserId != Context.Session.GetInt32("userId"))
+				{
+					<div class="profile">
+						<div class="profile-info" style="font-size:95%">
+							<b><span class="display-name">@users.Name</span></b>
+							<span class="username">@users.Username</span>
+						</div>
+
+						@if (ViewBag.FollowedUserList.Contains(users.UserId))
+						{
+							<button id='@users.UserId' class="followed" onclick="followTheme.followUnfollow('@users.UserId','@Context.Session.GetInt32("userId")')">Unfollow</button>
+						}
+						else
+						{
+							<button id='@users.UserId' class="follow-button" onclick="followTheme.followUnfollow('@users.UserId','@Context.Session.GetInt32("userId")')">Follow</button>
+						}
+
+
+					</div>
+
+					<span class="divider"></span>
+				}
+
+			}
+		}
+
+	</div>
+</div>

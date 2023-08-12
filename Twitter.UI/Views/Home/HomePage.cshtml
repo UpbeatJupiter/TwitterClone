@@ -1,0 +1,196 @@
+﻿@using Twitter.Core.Dtos
+@using Twitter.UI.Helper
+@using Microsoft.AspNetCore.Http
+
+@model Twitter.Core.Dtos.UserDto
+
+@{
+	ViewData["Title"] = "Home Page";
+}
+
+<div class="row container-fluid container-md">
+	<!-- left side bar (xs is for phone grid) -->
+	<div class="col-xs-4 col-md-3">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-12">
+					<span>
+						<i class="fa-brands fa-twitter fs-2 py-3" style="color: #1d9bf0;"></i>
+						<b><span id="left-side-bar-text">@Model.Name.ToUpper()</span></b>
+					</span>
+
+				</div>
+				<div class="col-12">
+					<span>
+						<i class="fa-solid fa-house fs-3 py-3"></i>
+						<span id="left-side-bar-text">Home</span>
+					</span>
+				</div>
+				<div class="col-12">
+					<span>
+						<i class="fa-sharp fa-regular fa-hashtag fs-2 py-3"></i>
+						<span id="left-side-bar-text"> Explore</span>
+					</span>
+				</div>
+				<div class="col-12">
+					<span>
+						<i class="fa-regular fa-bell fs-2 py-3"></i>
+						<span id="left-side-bar-text"> Notifications</span>
+					</span>
+				</div>
+				<div class="col-12">
+					<span>
+						<i class="fa-regular fa-envelope fs-2 py-3"></i>
+						<span id="left-side-bar-text">Messages</span>
+					</span>
+				</div>
+				<div class="col-12">
+					<span>
+						<i class="fa-solid fa-bars fs-2 py-3"></i>
+						<span id="left-side-bar-text"> Lists</span>
+					</span>
+				</div>
+				<div class="col-12">
+					<span>
+						<i class="fa-regular fa-bookmark fs-2 py-3"></i>
+						<span id="left-side-bar-text">  Bookmarks</span>
+					</span>
+				</div>
+				<div class="col-12">
+					<span>
+						<i class="fa-brands fa-square-twitter fs-2 py-3" style="color: #1d9bf0;"></i>
+						<span id="left-side-bar-text"> Twitter Blue</span>
+					</span>
+				</div>
+				<div class="col-12">
+					<span>
+						<i class="fa-regular fa-user fs-2 py-3"></i>
+						<span id="left-side-bar-text"> Profile</span>
+					</span>
+				</div>
+				<div class="col-12">
+					<span>
+						<i class="fa-solid fa-ellipsis fs-2 py-3"></i>
+						<span id="left-side-bar-text"> More</span>
+					</span>
+				</div>
+
+				@if (Model.UserRole == "admin")
+				{
+					<div class="col-12">
+						<span>
+							<i class="fa-solid fa-file-arrow-down fs-2 py-3"></i>
+							<a id="left-side-bar-text" style="text-decoration: none; color: #1d9bf0; font-weight: bold;"
+							   href="/Home/AdminExportFile"> Export</a>
+						</span>
+					</div>
+				}
+				<div class="col-12">
+					<span>
+						<i class="fa-regular fa-comment-dots fs-2 py-3"></i>
+						<a id="left-side-bar-text" style="text-decoration: none; color: #1d9bf0; font-weight: bold;" 
+						href="/Home/Review/@Context.Session.GetInt32("userId")"> Feedback</a>
+					</span>
+				</div>
+				<div class="col-12">
+					<button class="btn rounded-pill fs-4 pt-1 px-5 m-3" type="button" id="tweet">Tweet</button>
+				</div>
+				<div class="col-12">
+					<i class="fa-solid fa-arrow-right-from-bracket" style="color: #842029;margin: 3%;"></i>
+					<a style="text-decoration: none; color: #842029; font-weight: bold;margin: 3%;" data-toggle="tab" href="/Home/Logout">Log Out</a>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<!-- middle part -->
+	<div class="col-xs-8 col-md-6">
+		<div class="container-fluid">
+			<div class="row">
+
+				<div class="col-12 fs-4 py-2">
+					<span>Home</span>
+				</div>
+				<hr />
+				<div class="col-12">
+					<div class="row" style="text-align:center;">
+						<div class="col-xs-4 col-md-2 py-2">
+							<div class="flex-shrink-0" style="width: 75%;max-width: 100px;">
+								<img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-2.webp"
+									 alt="Generic placeholder image" class="img-fluid rounded-circle">
+							</div>
+						</div>
+						<div class="col-xs-8 col-md-10 fs-4 ">
+							<div class="row">
+								<div class="col-12">
+									<div class="form-group">
+										<input type="text" class="form-control" style="border: none;float:left;" placeholder="What is happenning?!" id="tweetContentInput">
+									</div>
+								</div>
+								<br />
+								<br />
+								<div class="col-12 m-2">
+									<div class="row" style="justify-content: space-between; align-items: flex-end;">
+										<div class="col-5">
+											<div class="row" style="flex-flow: row;">
+												<div class="col-2">
+													<span><i class="fa-regular fa-image fs-5 py-1" style="color: #1d9bf0;"></i></span>
+												</div>
+												<div class="col-2">
+													<span><i class="fa-regular fa-square-minus fs-5 py-1" style="color: #1d9bf0;"></i></span>
+												</div>
+												<div class="col-2">
+													<span><i class="fa-solid fa-list-ul fs-5 py-1" style="color: #1d9bf0;"></i></span>
+												</div>
+												<div class="col-2">
+													<span><i class="fa-regular fa-face-smile fs-5 py-1" style="color: #1d9bf0;"></i></span>
+												</div>
+												<div class="col-2">
+													<span><i class="fa-regular fa-calendar fs-5 py-1" style="color: #1d9bf0;"></i></span>
+												</div>
+												<div class="col-2">
+													<span><i class="fa-solid fa-location-dot fs-5 py-1" style="color: #1d9bf0;"></i></span>
+												</div>
+											</div>
+										</div>
+
+										<div class="col-5">
+											<button class="btn btn-sm rounded-pill pt-1 px-4" type="submit" id="tweet" onclick="postTweet.tweetCont('@Context.Session.GetInt32("userId")')">Tweet</button>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+				<hr />
+				<div class="col-12">
+
+					<!-- Tweets -->
+
+					<div id="allTweets">
+
+						@Html.Partial("~/Views/Home/AllTweetPV.cshtml")
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- right side bar -->
+	<div class=".d-none .d-md-block col-xs-4 col-md-3">
+		<form action="">
+			<div class="input-group mb-4 border rounded-pill p-2" style="background-color:#f2f2f2">
+				<div class="input-group-prepend border-0">
+					<button id="button-addon4" type="button" class="btn btn-link text-info"><i class="fa fa-search"></i></button>
+				</div>
+				<input type="search" placeholder="Search Twitter" aria-describedby="button-addon4" class="form-control bg-none border-0" style="background-color:#f2f2f2">
+			</div>
+		</form>
+		<div class="border rounded-pill border-0">
+		</div>
+		@Html.Partial("~/Views/Home/FollowPV.cshtml")
+	</div>
+</div>

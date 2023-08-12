@@ -1,0 +1,45 @@
+﻿@{
+	ViewData["Title"] = "Log In";
+}
+
+<div class="d-flex justify-content-center" id="LoginForm">
+	<div class="col-md-7 col-lg-5">
+		<div class="row">
+			<div class="col-12">
+				<span><i class="fa-brands fa-twitter fs-2 py-3" style="color: #1d9bf0;"></i></span>
+			</div>
+			<div class="col-12 mb-4">
+				<span>Log in to Twitter</span>
+			</div>
+				<div class="col-12 form-group mb-4">
+					<input type="text" class="form-control" required="" placeholder="Username" id="usernameLogin">
+
+				</div>
+				<div class="col-12 form-group mb-3">
+					<input type="password" class="form-control" required="" placeholder="Password" id="passwordLogin">
+
+				</div>
+				<div class="col-12 form-group mb-3">
+					<button type="submit" class="form-control btn rounded submit px-3" id="tweet" onclick="login.userLogin()">Log In</button>
+				</div>
+			<div class="col-12 form-group d-md-flex">
+				<div class="w-50 text-left" style="text-align: left !important;">
+					<label class="checkbox-wrap checkbox-primary mb-0">
+						<input type="checkbox" checked="">
+						<span class="checkmark"></span>
+						Remember Me
+					</label>
+				</div>
+				<div class="w-50 text-md-right">
+					<a href="#" style="text-decoration: none; float:right;">Forgot Password</a>
+				</div>
+			</div>
+
+		</div>
+		<div class="col-12 mt-4">
+			<p class="text-center">Not a member? <a data-toggle="tab" href="/Home/Register">Sign Up</a></p>
+		</div>
+
+	</div>
+
+</div>

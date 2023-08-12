@@ -1,0 +1,16 @@
+﻿@{
+	ViewData["Title"] = "Feedback";
+}
+
+<div id="reviewInput" >
+<h2>Feedback</h2>
+<p>To help us, please take a moment to leave your feedback. </p>
+<div class="container">
+		<div class="row">
+			<div class="col-75">
+				<textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
+				<button class="btn btn-sm rounded-pill pt-1 px-4" type="submit" id="tweet" onclick="userReview('@Context.Session.GetInt32("userId")')">Submit</button>
+			</div>
+		</div>
+</div>
+</div>
