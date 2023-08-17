@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "VaDi0V2N7/0ALEGR7h9RNmwuVLMPa9YKFuL0hQwYqHJrITNIPmUag0yfl93W/pauvbj9XZaN2wvaI+JUxJ8Vqg==",
+  "dgSpecHash": "QafxCtNONp2R7auosxIcN6A9/k1i7kFm8GgZrWvBPk/VwGH+6c+Qg5ytfNW51Csc4rFWD0JgUhcAxUoeNQ6eig==",
   "success": true,
   "projectFilePath": "C:\\Users\\Elif Tuncer\\source\\repos\\Twitter\\Twitter.UI\\Twitter.UI.csproj",
   "expectedPackageFiles": [
@@ -9,6 +9,7 @@
     "C:\\Users\\Elif Tuncer\\.nuget\\packages\\azure.core\\1.33.0\\azure.core.1.33.0.nupkg.sha512",
     "C:\\Users\\Elif Tuncer\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
     "C:\\Users\\Elif Tuncer\\.nuget\\packages\\bouncycastle\\1.8.9\\bouncycastle.1.8.9.nupkg.sha512",
+    "C:\\Users\\Elif Tuncer\\.nuget\\packages\\documentformat.openxml\\2.20.0\\documentformat.openxml.2.20.0.nupkg.sha512",
     "C:\\Users\\Elif Tuncer\\.nuget\\packages\\epplus\\6.2.7\\epplus.6.2.7.nupkg.sha512",
     "C:\\Users\\Elif Tuncer\\.nuget\\packages\\epplus.interfaces\\6.1.1\\epplus.interfaces.6.1.1.nupkg.sha512",
     "C:\\Users\\Elif Tuncer\\.nuget\\packages\\epplus.system.drawing\\6.1.1\\epplus.system.drawing.6.1.1.nupkg.sha512",
@@ -141,6 +142,7 @@
     "C:\\Users\\Elif Tuncer\\.nuget\\packages\\microsoft.net.stringtools\\17.3.2\\microsoft.net.stringtools.17.3.2.nupkg.sha512",
     "C:\\Users\\Elif Tuncer\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\Elif Tuncer\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
+    "C:\\Users\\Elif Tuncer\\.nuget\\packages\\microsoft.office.interop.word\\15.0.4797.1004\\microsoft.office.interop.word.15.0.4797.1004.nupkg.sha512",
     "C:\\Users\\Elif Tuncer\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
     "C:\\Users\\Elif Tuncer\\.nuget\\packages\\microsoft.visualstudio.debugger.contracts\\17.2.0\\microsoft.visualstudio.debugger.contracts.17.2.0.nupkg.sha512",
     "C:\\Users\\Elif Tuncer\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration\\6.0.15\\microsoft.visualstudio.web.codegeneration.6.0.15.nupkg.sha512",
@@ -186,6 +188,7 @@
     "C:\\Users\\Elif Tuncer\\.nuget\\packages\\system.globalization\\4.3.0\\system.globalization.4.3.0.nupkg.sha512",
     "C:\\Users\\Elif Tuncer\\.nuget\\packages\\system.identitymodel.tokens.jwt\\6.31.0\\system.identitymodel.tokens.jwt.6.31.0.nupkg.sha512",
     "C:\\Users\\Elif Tuncer\\.nuget\\packages\\system.io\\4.3.0\\system.io.4.3.0.nupkg.sha512",
+    "C:\\Users\\Elif Tuncer\\.nuget\\packages\\system.io.packaging\\4.7.0\\system.io.packaging.4.7.0.nupkg.sha512",
     "C:\\Users\\Elif Tuncer\\.nuget\\packages\\system.io.pipelines\\5.0.1\\system.io.pipelines.5.0.1.nupkg.sha512",
     "C:\\Users\\Elif Tuncer\\.nuget\\packages\\system.linq\\4.3.0\\system.linq.4.3.0.nupkg.sha512",
     "C:\\Users\\Elif Tuncer\\.nuget\\packages\\system.linq.expressions\\4.3.0\\system.linq.expressions.4.3.0.nupkg.sha512",

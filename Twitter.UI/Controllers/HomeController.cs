@@ -1,17 +1,22 @@
-﻿using Google.Apis.Auth.OAuth2;
+﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using Google.Apis.Auth.OAuth2;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using iTextSharp.text.pdf.codec;
 using iTextSharp.text.pdf.parser;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Graph.Models.IdentityGovernance;
 using NonFactors.Mvc.Grid;
 using OfficeOpenXml;
 using QRCoder;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Text.RegularExpressions;
 using Twitter.Core.Dtos;
 using Twitter.Core.Services;
 using Twitter.UI.Helper;
@@ -212,8 +217,11 @@ namespace Twitter.UI.Controllers
 
 		public void PdfManipulator(UserDto userDto)
 		{
-			string input = "input.pdf";
-			string result = "result.pdf";
+			string input = "inputWord.docx";
+			string result = "result.docx";
+			string resultPDF = "resultPDF.pdf";
+
+			string qrImagePath = "output.png";  // Path to save the PNG image
 
 			//QR generator
 			QRCodeGenerator qrGenerator = new QRCodeGenerator();
@@ -222,72 +230,51 @@ namespace Twitter.UI.Controllers
 			QRCode qrCode = new QRCode(qrCodeData);
 			Bitmap qrCodeImage = qrCode.GetGraphic(20);
 
-			// Convert QR code image to a byte array
-			using (MemoryStream stream = new MemoryStream())
+			// Save the BMP image as a PNG image
+			qrCodeImage.Save(qrImagePath, ImageFormat.Png);
+
+			using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(input, false)) // Open in read-only mode
 			{
-				qrCodeImage.Save(stream, ImageFormat.Png);
-				byte[] qrCodeBytes = stream.ToArray();
-
-				using (var inputPdfStream = new System.IO.FileStream(input, System.IO.FileMode.Open))
-				using (var resultPdfStream = new System.IO.FileStream(result, System.IO.FileMode.Create))
+				string docText = null;
+				using (StreamReader sr = new StreamReader(wordDoc.MainDocumentPart.GetStream()))
 				{
-					var reader = new PdfReader(inputPdfStream);
-					var stamper = new PdfStamper(reader, resultPdfStream);
-
-					for (int i = 1; i <= reader.NumberOfPages; i++)
-					{
-						// Get the nth page
-						var page = reader.GetPageN(i);
-						var pageSize = reader.GetPageSizeWithRotation(i);
-
-						//existing text
-						var existingText = PdfTextExtractor.GetTextFromPage(reader, i, new SimpleTextExtractionStrategy());
-
-						// Replace placeholders in existing text
-						var newText = existingText.Replace("@name@", userDto.Name);
-						newText = newText.Replace("@date@", DateTime.Today.ToString("dd-MM-yyyy"));
-
-						// Load the QR code image into iTextSharp's Image class
-						var qrCodeImageObj = iTextSharp.text.Image.GetInstance(qrCodeBytes);
-						qrCodeImageObj.ScaleToFit(100, 100); // Adjust size as needed
-
-						// Add the QR code image to the bottom-right corner of the page
-						qrCodeImageObj.SetAbsolutePosition(pageSize.Width - qrCodeImageObj.ScaledWidth - 20, 20);
-
-						// Get the content of the current page
-						var contentByte = stamper.GetOverContent(i);
-						contentByte.AddImage(qrCodeImageObj);
-
-						var contentBytes = stamper.GetUnderContent(i);
-
-						// Create a ColumnText object to add the modified text
-						var columnText = new ColumnText(contentBytes);
-						var font = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-						columnText.SetSimpleColumn(50, 50, pageSize.Width - 50, pageSize.Height - 50);
-						
-						// Set font and size
-						contentByte.SetFontAndSize(font, 12);
-
-						// Calculate position based on your requirements
-						float x = 50;
-						float y = pageSize.Height - 50;
-
-						contentByte.BeginText();
-						contentByte.SetTextMatrix(x, y);
-						contentByte.ShowText(newText);
-						contentByte.EndText();
-
-						// Add the modified text to the page
-						columnText.Go();
-					}
-					stamper.Close();
-					reader.Close();
+					docText = sr.ReadToEnd();
 				}
+
+				// Perform replacements
+				docText = docText.Replace("@date@", DateTime.Today.ToString("dd-MM-yyyy"));
+				docText = docText.Replace("@name@", userDto.Name);
+
+
+				// Create a new Word document with modified content
+				using (WordprocessingDocument newWordDoc = WordprocessingDocument.Create(result, WordprocessingDocumentType.Document)) 
+				{
+					MainDocumentPart mainPart = newWordDoc.AddMainDocumentPart();
+					using (StreamWriter sw = new StreamWriter(mainPart.GetStream()))
+					{
+						sw.Write(docText);
+						sw.Write('\n');
+						
+
+					}
+				}
+
+
 			}
 
 
 		}
-		#endregion
+		
+	
+
+
+	
+	#endregion
+
+	public string ReplacePlaceholders(string originalText, string placeholder, string replacement)
+		{
+			return originalText.Replace(placeholder, replacement);
+		}
 
 		#region HomePage
 		public IActionResult HomePage()

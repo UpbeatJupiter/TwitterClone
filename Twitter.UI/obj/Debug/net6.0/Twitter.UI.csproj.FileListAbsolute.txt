@@ -297,3 +297,6 @@ C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\runtimes\w
 C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\BouncyCastle.Crypto.dll
 C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\itextsharp.dll
 C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\QRCoder.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\DocumentFormat.OpenXml.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\System.IO.Packaging.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\Microsoft.Office.Interop.Word.dll
