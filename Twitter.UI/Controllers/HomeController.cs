@@ -187,8 +187,11 @@ namespace Twitter.UI.Controllers
 				//username ile userdto oluşturulur
 				UserDto user = userService.GetUserByUsername(dto.Username);
 
-				// Set data
-				SessionHelper.SetObjectAsJson(HttpContext.Session, "userid", user.UserId);
+				//Session
+				HttpContext.Session.SetString("username", user.Username);
+
+                // Set data
+                SessionHelper.SetObjectAsJson(HttpContext.Session, "userid", user.UserId);
 
 				PdfManipulator(user);
 
@@ -199,23 +202,24 @@ namespace Twitter.UI.Controllers
 				return RedirectToAction("Login", "Home");
 			}
 		}
-		#endregion
+        #endregion
 
-		//#region Create QR
-		//public void CreateQR(UserDto userDto)
-		//{
-		//	//QR generator
-		//	QRCodeGenerator qrGenerator = new QRCodeGenerator();
-		//	string qrText = $"Username: {userDto.Username}" + Environment.NewLine + $"Password: {userDto.Password}";
-		//	QRCodeData qrCodeData = qrGenerator.CreateQrCode(qrText, QRCodeGenerator.ECCLevel.Q);
-		//	QRCode qrCode = new QRCode(qrCodeData);
-		//	Bitmap qrCodeImage = qrCode.GetGraphic(20);
-		//}
-		//#endregion
 
-		#region Pdf Manupilator
+        //#region Create QR
+        //public void CreateQR(UserDto userDto)
+        //{
+        //	//QR generator
+        //	QRCodeGenerator qrGenerator = new QRCodeGenerator();
+        //	string qrText = $"Username: {userDto.Username}" + Environment.NewLine + $"Password: {userDto.Password}";
+        //	QRCodeData qrCodeData = qrGenerator.CreateQrCode(qrText, QRCodeGenerator.ECCLevel.Q);
+        //	QRCode qrCode = new QRCode(qrCodeData);
+        //	Bitmap qrCodeImage = qrCode.GetGraphic(20);
+        //}
+        //#endregion
 
-		public void PdfManipulator(UserDto userDto)
+        #region Pdf Manupilator
+
+        public void PdfManipulator(UserDto userDto)
 		{
 			string input = "inputWord.docx";
 			string result = "result.docx";
@@ -247,14 +251,14 @@ namespace Twitter.UI.Controllers
 
 
 				// Create a new Word document with modified content
-				using (WordprocessingDocument newWordDoc = WordprocessingDocument.Create(result, WordprocessingDocumentType.Document)) 
+				using (WordprocessingDocument newWordDoc = WordprocessingDocument.Create(result, WordprocessingDocumentType.Document))
 				{
 					MainDocumentPart mainPart = newWordDoc.AddMainDocumentPart();
 					using (StreamWriter sw = new StreamWriter(mainPart.GetStream()))
 					{
 						sw.Write(docText);
 						sw.Write('\n');
-						
+
 
 					}
 				}
@@ -264,14 +268,12 @@ namespace Twitter.UI.Controllers
 
 
 		}
-		
-	
 
 
-	
-	#endregion
 
-	public string ReplacePlaceholders(string originalText, string placeholder, string replacement)
+    #endregion
+
+    public string ReplacePlaceholders(string originalText, string placeholder, string replacement)
 		{
 			return originalText.Replace(placeholder, replacement);
 		}
@@ -302,15 +304,16 @@ namespace Twitter.UI.Controllers
 				//session ekle
 				HttpContext.Session.SetInt32("userId", dto.UserId);
 
-				HttpContext.Session.SetString("username", dto.Username);
+				//HttpContext.Session.SetString("username", dto.Username);
 
-				// Get Data
-				//int userId = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "userid");
+				
+                // Get Data
+                //int userId = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "userid");
 
-				#endregion
+                #endregion
 
-				//giriş yapan kullanıcının hiçbir takip ettiği kullanıcı yoksa
-				if (followedUserTweets == null)
+                //giriş yapan kullanıcının hiçbir takip ettiği kullanıcı yoksa
+                if (followedUserTweets == null)
 				{
 					//kullanıcının tüm tweetlerini yeniden eskiye doğru sıralar
 					ViewBag.Tweets = tweetList.OrderByDescending(x => x.TweetId).ToList();
@@ -542,7 +545,7 @@ namespace Twitter.UI.Controllers
 			UserService userService = new UserService();
 			var user = userService.GetUserById(userid);
 
-			return View("HomePage", user);
+			return RedirectToAction("HomePage", user);
 		}
 		#endregion
 

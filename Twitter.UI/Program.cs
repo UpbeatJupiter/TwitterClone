@@ -22,7 +22,9 @@ builder.Services.AddSession(options => {
 	options.Cookie.HttpOnly = true; 
 });
 builder.Services.AddMemoryCache();
-//builder.Services.AddSession();
+
+
+
 builder.Services.AddMvc();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 	.AddCookie(options =>
