@@ -2,6 +2,7 @@
 
 @{
 	Layout = null;
+	ViewData["Title"] = "Home Page";
 }
 @if (ViewBag.Tweets != null)
 {
@@ -35,7 +36,7 @@
 									}
 								</div>
 								<div class="col-6 col-md-4" style="text-align:center;">
-									@if (Context.Session.GetInt32("userId") == ViewBag.Tweets[item].UserId)
+									@if (Context.Session.GetInt32("CurrentUserid") == ViewBag.Tweets[item].UserId)
 									{
 										<span>
 											<i class="fa-solid fa-xmark fs-5 py-1" style="color: rgb(83, 100, 113);" 

@@ -9,7 +9,7 @@
 		<div class="row">
 			<div class="col-75">
 				<textarea id="subject" name="subject" placeholder="Write something.." style="height:200px"></textarea>
-				<button class="btn btn-sm rounded-pill pt-1 px-4" type="submit" id="tweet" onclick="review.userReview('@Context.Session.GetInt32("userId")')">Submit</button>
+				<button class="btn btn-sm rounded-pill pt-1 px-4" type="submit" id="tweet" onclick="review.userReview('@Context.Session.GetInt32("CurrentUserid")')">Submit</button>
 			</div>
 		</div>
 </div>

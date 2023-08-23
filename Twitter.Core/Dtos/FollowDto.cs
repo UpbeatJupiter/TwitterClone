@@ -20,5 +20,10 @@ namespace Twitter.Core.Dtos
 		/// </summary>
 		public int FollowingUserId { get; set; }
 
+		/// <summary>
+		/// kullanıcının takip tarihi
+		/// </summary>
+		public DateTime FollowDate { get; set; }
+
 	}
 }

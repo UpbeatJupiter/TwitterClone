@@ -9,12 +9,20 @@
         };
 
 
-        $('#LoginForm').load("/Home/Login",
-            {
-                dto: data
+        $.ajax({
+            type: "POST",
+            url: "/Home/Login", // Login action'ının URL'sini güncelleyin.
+            data: { dto: data },
+            success: function (response) {
+                // Başarılı cevap geldiyse işlemler yapabilirsiniz.
+                window.location.href = "/Home/HomePage";
+                // Örneğin sayfa yenileme veya yönlendirme yapılabilir.
             },
-            function (response) {
+            error: function () {
+                // Başarısız cevap geldiyse işlemler yapabilirsiniz.
+                alert("Login failed. Invalid username or password.");
             }
-        );
+            
+        });
     }
 }

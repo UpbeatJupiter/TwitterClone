@@ -1,4 +1,5 @@
-﻿using Twitter.Core.Dtos;
+﻿using System.Linq;
+using Twitter.Core.Dtos;
 using Twitter.Data.Entities;
 using Twitter.Data.UnitOfWork;
 
@@ -23,7 +24,8 @@ namespace Twitter.Core.Services
 			var followedUser = new Follow
 			{
 				FollowedUserId = userid,
-				FollowingUserId = myUserId
+				FollowingUserId = myUserId,
+				FollowDate = DateTime.Now.Date
 			};
 
 			_unitOfWork.FollowRepository.Insert(followedUser);
@@ -50,23 +52,24 @@ namespace Twitter.Core.Services
 		/// </summary>
 		/// <param name="dto"></param>
 		/// <returns></returns>
-		public List<FollowDto> GetMyFollowed(UserDto dto) 
+		public List<FollowDto> GetMyFollowed(UserDto dto)
 		{
 			var data = _unitOfWork.FollowRepository.GetAll().Where(x => x.FollowingUserId == dto.UserId);
 			var list = new List<FollowDto>();
 			if (data != null)
 			{
-				list = data.Select(x => new FollowDto 
+				list = data.Select(x => new FollowDto
 				{
 					Id = x.Id,
 					FollowedUserId = x.FollowedUserId,
-					FollowingUserId = x.FollowingUserId
+					FollowingUserId = x.FollowingUserId,
+					FollowDate = x.FollowDate
 				}).ToList();
 			}
 			return list;
 		}
 
-		
+
 		public List<FollowDto> GetAll()
 		{
 			var data = _unitOfWork.FollowRepository.GetAll();
@@ -77,10 +80,31 @@ namespace Twitter.Core.Services
 				{
 					Id = x.Id,
 					FollowedUserId = x.FollowedUserId,
-					FollowingUserId = x.FollowingUserId
+					FollowingUserId = x.FollowingUserId,
+					FollowDate = x.FollowDate
 				}).ToList();
 			}
 			return list;
+		}
+
+		/// <summary>
+		/// aylık en çok takipçisi olan kullanıcı
+		/// </summary>
+		/// <param name="monthYear"></param>
+		/// <returns>username</returns>
+		public string WhoHaveMoreFollowers(string monthYear)
+		{
+			var userid = _unitOfWork.FollowRepository.GetAll()
+				.Where(record => record.FollowDate.ToString("MM/yyyy") == monthYear)
+				.GroupBy(record => record.FollowedUserId)
+				.OrderByDescending(group => group.Count())
+				.Select(group => group.Key)
+				.FirstOrDefault();
+
+			UserService userService = new UserService();
+			var username = userService.GetUserById(userid).Username;
+
+			return username;
 		}
 	}
 }

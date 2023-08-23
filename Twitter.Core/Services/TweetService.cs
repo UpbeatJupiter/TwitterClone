@@ -1,4 +1,5 @@
-﻿using Twitter.Core.Dtos;
+﻿using System.Globalization;
+using Twitter.Core.Dtos;
 using Twitter.Data.Entities;
 using Twitter.Data.UnitOfWork;
 
@@ -126,6 +127,26 @@ namespace Twitter.Core.Services
 			var tweetentity = _unitOfWork.TweetRepository.GetTweetById(Id);
 
 			return MapTweetEntityToDTO(tweetentity);
+		}
+
+		/// <summary>
+		/// tüm tweet sayısını getirir
+		/// </summary>
+		/// <returns>count</returns>
+		public int TweetCount(string monthYear)
+		{
+			DateTime targetDate;
+
+			if (DateTime.TryParseExact(monthYear, "MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out targetDate))
+			{
+				var tweets = _unitOfWork.TweetRepository.GetAll();
+				var count = tweets.Count(tweet => tweet.TweetDate.Year == targetDate.Year && tweet.TweetDate.Month == targetDate.Month);
+				return count;
+			}
+			else
+			{
+				throw new ArgumentException("Invalid monthYear format. Please use MM/yyyy format.");
+			}
 		}
 
 		/// <summary>

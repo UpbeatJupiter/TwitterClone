@@ -97,7 +97,7 @@ span {
     padding: 3% 8%;
     padding-bottom: 7%;
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     align-items: center;
     align-content: stretch;
     justify-items: stretch;

@@ -275,6 +275,10 @@
               "target": "Package",
               "version": "[1.61.0.3113, )"
             },
+            "Microsoft.AspNet.WebApi.Cors": {
+              "target": "Package",
+              "version": "[5.2.9, )"
+            },
             "Microsoft.AspNetCore.Session": {
               "target": "Package",
               "version": "[2.2.0, )"
@@ -296,6 +300,10 @@
             "Microsoft.Identity.Client": {
               "target": "Package",
               "version": "[4.54.1, )"
+            },
+            "Microsoft.Office.Interop.Excel": {
+              "target": "Package",
+              "version": "[15.0.4795.1001, )"
             },
             "Microsoft.Office.Interop.Word": {
               "target": "Package",

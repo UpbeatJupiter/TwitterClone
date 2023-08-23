@@ -30,6 +30,9 @@ namespace Twitter.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("FollowDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("FollowedUserId")
                         .HasColumnType("int");
 

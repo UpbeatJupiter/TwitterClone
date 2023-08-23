@@ -2,6 +2,7 @@
 
 @{
 	Layout = null;
+	ViewData["Title"] = "Home Page";
 }
 <div id="whoToFollow">
 	<div class="card border-0" style="background-color:#f2f2f2">
@@ -13,7 +14,7 @@
 		{
 			foreach (var users in ViewBag.UserList)
 			{
-				if (users.UserId != Context.Session.GetInt32("userId"))
+				if (users.UserId != Context.Session.GetInt32("CurrentUserid"))
 				{
 					<div class="profile">
 						<div class="profile-info" style="font-size:95%">
@@ -23,11 +24,11 @@
 
 						@if (ViewBag.FollowedUserList.Contains(users.UserId))
 						{
-							<button id='@users.UserId' class="followed" onclick="followTheme.followUnfollow('@users.UserId','@Context.Session.GetInt32("userId")')">Unfollow</button>
+							<button id='@users.UserId' class="followed" onclick="followTheme.followUnfollow('@users.UserId','@Context.Session.GetInt32("CurrentUserid")')">Unfollow</button>
 						}
 						else
 						{
-							<button id='@users.UserId' class="follow-button" onclick="followTheme.followUnfollow('@users.UserId','@Context.Session.GetInt32("userId")')">Follow</button>
+							<button id='@users.UserId' class="follow-button" onclick="followTheme.followUnfollow('@users.UserId','@Context.Session.GetInt32("CurrentUserid")')">Follow</button>
 						}
 
 

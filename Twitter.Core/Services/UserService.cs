@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Graph;
+using System.Globalization;
 using System.Security.Claims;
 using Twitter.Core.Dtos;
 using Twitter.Data.Entities;
@@ -123,6 +124,50 @@ namespace Twitter.Core.Services
             return list;
         }
 
+		/// <summary>
+		/// kayıt tarihlerini ay/yıl şeklinde getirir
+		/// </summary>
+		/// <returns></returns>
+		public List<string> GetRegisterDates()
+		{
+			var data = _unitOfWork.UserRepository.GetAll().Select(x => x.RegisterDate);
+
+			var list = new List<string>();
+			if (data != null)
+			{
+				foreach (var x in data)
+				{
+					if (!list.Contains(x.ToString("MM/yyyy")))
+					{
+						list.Add(x.ToString("MM/yyyy"));
+					}
+					
+				}
+			}
+			return list;
+		}
+
+		/// <summary>
+		/// tüm kullanıcı sayısını getirir
+		/// </summary>
+		/// <returns></returns>
+		public int UserCount(string monthYear)
+		{
+			DateTime targetDate;
+
+			if (DateTime.TryParseExact(monthYear, "MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out targetDate))
+			{
+				var users = _unitOfWork.UserRepository.GetAll();
+				var count = users.Count(user => user.RegisterDate.Year == targetDate.Year && user.RegisterDate.Month == targetDate.Month);
+				return count;
+			}
+			else
+			{
+				throw new ArgumentException("Invalid monthYear format. Please use MM/yyyy format.");
+			}
+		}
+
+		
 
 		/// <summary>
 		/// Entity den Dto tipine çevirir

@@ -8,5 +8,6 @@ namespace Twitter.Data.Repositories
 		IEnumerable<User> GetUsers();
 		User GetUserById(int userId);
 		User GetUserByUsername(string username);
+		int UserCount();
 	}
 }

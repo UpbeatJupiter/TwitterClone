@@ -24,5 +24,10 @@ namespace Twitter.Data.Entities
 		/// takip eden id
 		/// </summary>
 		public int FollowingUserId { get; set; }
+
+		/// <summary>
+		/// kullanıcının takip tarihi
+		/// </summary>
+		public DateTime FollowDate { get; set; }
 	}
 }

@@ -25,6 +25,11 @@ namespace Twitter.Data.Repositories
 		{
 			 return _context.Users.Where(x => x.Username == username).FirstOrDefault();
 		}
+		
+		public int UserCount()
+		{
+			return _context.Users.Count();
+		}
 		public IEnumerable<User> GetUsers()
 		{
 			return _context.Users;

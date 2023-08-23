@@ -1,26 +1,24 @@
 ﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.ExtendedProperties;
 using DocumentFormat.OpenXml.Packaging;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
-using iTextSharp.text.pdf.codec;
-using iTextSharp.text.pdf.parser;
+using iTextSharp.xmp.impl.xpath;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Graph.Models.IdentityGovernance;
+using Microsoft.Office.Interop.Word;
 using NonFactors.Mvc.Grid;
 using OfficeOpenXml;
 using QRCoder;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Text.RegularExpressions;
 using Twitter.Core.Dtos;
 using Twitter.Core.Services;
-using Twitter.UI.Helper;
 using Twitter.UI.Models;
+using Word = Microsoft.Office.Interop.Word;
+
 
 namespace Twitter.UI.Controllers
 {
@@ -34,11 +32,7 @@ namespace Twitter.UI.Controllers
 
 
 		#region Link to Index-Login-Logout-Signup-Review
-		public IActionResult Index()
-		{
-			return View("Login");
-		}
-
+		
 		// GET: Home/Login
 		public IActionResult Login()
 		{
@@ -165,6 +159,28 @@ namespace Twitter.UI.Controllers
 		}
 		#endregion
 
+		#region Get Session
+
+		public const string SessionKeyName = "CurrentUsername";
+		public const string SessionKeyId = "CurrentUserid";
+		public void GetSession(UserDto user)
+		{
+
+			if (string.IsNullOrEmpty(HttpContext.Session.GetString(SessionKeyName)))
+			{
+				HttpContext.Session.SetString(SessionKeyName, user.Username);
+				HttpContext.Session.SetInt32(SessionKeyId, user.UserId);
+			}
+			var currentUsername = HttpContext.Session.GetString(SessionKeyName);
+			var currentUserid = HttpContext.Session.GetInt32(SessionKeyId).ToString();
+
+			_logger.LogInformation("Session Username: {currentUsername}", currentUsername);
+			_logger.LogInformation("Session User id: {currentUserid}", currentUserid);
+
+		}
+
+		#endregion
+
 		#region Login Page
 		/// <summary>
 		/// Kullanıcı kayıtlıysa anasayfayı getirir, 
@@ -187,39 +203,40 @@ namespace Twitter.UI.Controllers
 				//username ile userdto oluşturulur
 				UserDto user = userService.GetUserByUsername(dto.Username);
 
-				//Session
-				HttpContext.Session.SetString("username", user.Username);
-
-                // Set data
-                SessionHelper.SetObjectAsJson(HttpContext.Session, "userid", user.UserId);
+				GetSession(user);
 
 				PdfManipulator(user);
+				if (user.UserRole == "admin")
+				{
 
-				return RedirectToAction("HomePage", "Home");
+					WriteToExcelDoc();
+				}
+
+				return RedirectToAction("HomePage");
 			}
 			else //kullanıcı bilgileri yanlışsa
 			{
-				return RedirectToAction("Login", "Home");
+				return RedirectToAction("Login");
 			}
 		}
-        #endregion
+		#endregion
 
 
-        //#region Create QR
-        //public void CreateQR(UserDto userDto)
-        //{
-        //	//QR generator
-        //	QRCodeGenerator qrGenerator = new QRCodeGenerator();
-        //	string qrText = $"Username: {userDto.Username}" + Environment.NewLine + $"Password: {userDto.Password}";
-        //	QRCodeData qrCodeData = qrGenerator.CreateQrCode(qrText, QRCodeGenerator.ECCLevel.Q);
-        //	QRCode qrCode = new QRCode(qrCodeData);
-        //	Bitmap qrCodeImage = qrCode.GetGraphic(20);
-        //}
-        //#endregion
+		//#region Create QR
+		//public void CreateQR(UserDto userDto)
+		//{
+		//	//QR generator
+		//	QRCodeGenerator qrGenerator = new QRCodeGenerator();
+		//	string qrText = $"Username: {userDto.Username}" + Environment.NewLine + $"Password: {userDto.Password}";
+		//	QRCodeData qrCodeData = qrGenerator.CreateQrCode(qrText, QRCodeGenerator.ECCLevel.Q);
+		//	QRCode qrCode = new QRCode(qrCodeData);
+		//	Bitmap qrCodeImage = qrCode.GetGraphic(20);
+		//}
+		//#endregion
 
-        #region Pdf Manupilator
+		#region Pdf Manupilator
 
-        public void PdfManipulator(UserDto userDto)
+		public void PdfManipulator(UserDto userDto)
 		{
 			string input = "inputWord.docx";
 			string result = "result.docx";
@@ -259,36 +276,158 @@ namespace Twitter.UI.Controllers
 						sw.Write(docText);
 						sw.Write('\n');
 
-
 					}
 				}
-
-
 			}
+
 
 
 		}
 
 
 
-    #endregion
-
-    public string ReplacePlaceholders(string originalText, string placeholder, string replacement)
+		public string ReplacePlaceholders(string originalText, string placeholder, string replacement)
 		{
 			return originalText.Replace(placeholder, replacement);
 		}
 
+		#endregion
+
+
+		#region WriteToExcel
+
+		/// <summary>
+		/// aylık rapor için excel
+		/// </summary>
+		public void WriteToExcelDoc()
+		{
+			using (ExcelPackage excel = new ExcelPackage())
+			{
+				excel.Workbook.Worksheets.Add("Worksheet1");
+				excel.Workbook.Worksheets.Add("Worksheet2");
+				excel.Workbook.Worksheets.Add("Worksheet3");
+
+				//to add a header row
+				List<string[]> headerRow = new List<string[]>()
+				{
+					new string[] { "Tarih", "Kaydolan Kullanıcılar", "Toplam Kullanıcı", "En Çok Takipçisi Olan", "Tweet Sayısı" }
+				};
+
+				// Determine the header range (e.g. A1:D1)
+				string headerRange = "A1:" + Char.ConvertFromUtf32(headerRow[0].Length + 64) + "1";
+
+				// Target a worksheet
+				var worksheet = excel.Workbook.Worksheets["Worksheet1"];
+
+				// Popular header row data
+				worksheet.Cells[headerRange].LoadFromArrays(headerRow);
+
+				//Style the row
+				worksheet.Cells[headerRange].Style.Font.Bold = true;
+				worksheet.Cells[headerRange].Style.Font.Size = 14;
+				worksheet.Columns.AutoFit(); //autofit
+
+				//write data to rows
+				var date = RegisterDates();
+				date.Sort();       // Tarihleri eskiden yeniye sıralama
+
+				int dateRows = 2; //date başlangıç satırı
+				
+				int userCount = 0;
+				int totalUsers = 0;
+				int totalTweets = 0;
+
+				foreach (var item in date)
+				{
+					worksheet.Cells[dateRows, 1].Value = item; //    ay/yıl
+
+					totalUsers = TotalUsers(item);
+					worksheet.Cells[dateRows, 2].Value = totalUsers;
+
+					userCount += totalUsers;
+					worksheet.Cells[dateRows, 3].Value = userCount; //toplam kullanıcı
+
+					string userHaveMoreFollowers = WhoHaveMoreFollowers(item);
+					worksheet.Cells[dateRows, 4].Value = userHaveMoreFollowers; //En çok takipçisi olan kullanıcı
+
+					totalTweets += TotalTweets(item);
+					worksheet.Cells[dateRows, 5].Value = totalTweets; //Toplam tweet sayısı
+
+					dateRows++;
+				}
+
+				FileInfo excelFile = new FileInfo(@"C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\AdminExcel.xlsx");
+				excel.SaveAs(excelFile);
+			}
+		}
+
+		/// <summary>
+		/// aylık kayıt tarihleri
+		/// </summary>
+		/// <returns>string list</returns>
+		public List<string> RegisterDates()
+		{
+			UserService userService = new UserService();	
+
+			var list = userService.GetRegisterDates();
+
+			return list;
+		}
+
+		/// <summary>
+		///  toplam katılımcı sayısı
+		/// </summary>
+		/// <param name="mounthYear">mm-yyyy</param>
+		/// <returns>int</returns>
+		public int TotalUsers(string mounthYear)
+		{
+			UserService userService = new UserService();
+
+			var count = userService.UserCount(mounthYear);
+
+			return count;
+		}
+
+		/// <summary>
+		/// Ayın en çok takipçisi olan kullanıcı
+		/// </summary>
+		/// <param name="mounthYear"></param>
+		/// <returns>username</returns>
+		public string WhoHaveMoreFollowers(string mounthYear)
+		{
+			FollowService followService = new FollowService();	
+
+			string username = followService.WhoHaveMoreFollowers(mounthYear);
+
+			return username;
+		}
+
+		public int TotalTweets(string mounthYear)
+		{
+			TweetService tweetService = new TweetService();
+
+			int count = tweetService.TweetCount(mounthYear);
+
+			return count;	
+		}
+
+		#endregion
+
+
 		#region HomePage
+		//GET: /Home/HomePage
 		public IActionResult HomePage()
 		{
 			TweetService tweetService = new TweetService();
 			UserService userService = new UserService();
 
-			int id = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "userid");
+			var username = HttpContext.Session.GetString("CurrentUsername");
 
-			if (id != 0)
+			if (username != null)
 			{
-				UserDto dto = userService.GetUserById(id);
+				UserDto dto = userService.GetUserByUsername(username);
+
+				GetSession(dto);
 
 				//giriş yapan kullanıcının tüm tweetleri 
 				List<TweetDto> tweetList = tweetService.GetUserTweets(dto.UserId);
@@ -301,19 +440,13 @@ namespace Twitter.UI.Controllers
 				List<TweetDto> followedUserTweets = tweetService.GetFollowedTweets(dto.UserId);
 
 				#region Session
-				//session ekle
-				HttpContext.Session.SetInt32("userId", dto.UserId);
 
-				//HttpContext.Session.SetString("username", dto.Username);
+				GetSession(dto);
 
-				
-                // Get Data
-                //int userId = SessionHelper.GetObjectFromJson<int>(HttpContext.Session, "userid");
+				#endregion
 
-                #endregion
-
-                //giriş yapan kullanıcının hiçbir takip ettiği kullanıcı yoksa
-                if (followedUserTweets == null)
+				//giriş yapan kullanıcının hiçbir takip ettiği kullanıcı yoksa
+				if (followedUserTweets == null)
 				{
 					//kullanıcının tüm tweetlerini yeniden eskiye doğru sıralar
 					ViewBag.Tweets = tweetList.OrderByDescending(x => x.TweetId).ToList();
@@ -321,9 +454,9 @@ namespace Twitter.UI.Controllers
 
 					//Username Listesi
 					List<string> usernameList = new List<string>
-				{
-					dto.Username
-				};
+					{
+						dto.Username
+					};
 
 					ViewBag.Username = usernameList;
 
@@ -344,8 +477,6 @@ namespace Twitter.UI.Controllers
 			{
 				return RedirectToAction("Login");
 			}
-
-
 
 		}
 		#endregion
@@ -514,8 +645,8 @@ namespace Twitter.UI.Controllers
 		{
 			string[] Scopes = { SheetsService.Scope.Spreadsheets };
 			string ApplicationName = ".Net Core To Sheets";
-            string SpreadsheetId = "1Mt6ZoK_ysLzeLPIaTk1rJ8K_BtYIX5jLoWioToOnPcs";
-            string sheet = "Sheet1";
+			string SpreadsheetId = "1Mt6ZoK_ysLzeLPIaTk1rJ8K_BtYIX5jLoWioToOnPcs";
+			string sheet = "Sheet1";
 
 			SheetsService service;
 
@@ -544,6 +675,8 @@ namespace Twitter.UI.Controllers
 
 			UserService userService = new UserService();
 			var user = userService.GetUserById(userid);
+
+			var session = (HttpContext.Session.GetString("CurrentUsername") == null ? "Sessionımız var" : "Sessionımız yok");
 
 			return RedirectToAction("HomePage", user);
 		}

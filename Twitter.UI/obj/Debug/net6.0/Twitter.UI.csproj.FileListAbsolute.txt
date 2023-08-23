@@ -300,3 +300,9 @@ C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\QRCoder.dl
 C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\DocumentFormat.OpenXml.dll
 C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\System.IO.Packaging.dll
 C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\Microsoft.Office.Interop.Word.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\System.Web.Cors.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\System.Net.Http.Formatting.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\System.Web.Http.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\System.Web.Http.Cors.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\Microsoft.Office.Interop.Excel.dll

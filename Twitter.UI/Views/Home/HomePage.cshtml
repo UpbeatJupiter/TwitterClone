@@ -2,17 +2,19 @@
 @using Twitter.UI.Helper
 @using Microsoft.AspNetCore.Http
 
+
 @model Twitter.Core.Dtos.UserDto
 
 @{
 	ViewData["Title"] = "Home Page";
 }
 
+
 <div class="row container-fluid container-md">
 	<!-- left side bar (xs is for phone grid) -->
 	<div class="col-xs-4 col-md-3">
 		<div class="container-fluid">
-			<div class="row">
+			<div class="row" style="justify-content: space-evenly;">
 				<div class="col-12">
 					<span>
 						<i class="fa-brands fa-twitter fs-2 py-3" style="color: #1d9bf0;"></i>
@@ -88,8 +90,8 @@
 				<div class="col-12">
 					<span>
 						<i class="fa-regular fa-comment-dots fs-2 py-3"></i>
-						<a id="left-side-bar-text" style="text-decoration: none; color: #1d9bf0; font-weight: bold;" 
-						href="/Home/Review/@Context.Session.GetInt32("userId")"> Feedback</a>
+						<a id="left-side-bar-text" style="text-decoration: none; color: #1d9bf0; font-weight: bold;"
+						   href="/Home/Review/@Context.Session.GetInt32("CurrentUserid")"> Feedback</a>
 					</span>
 				</div>
 				<div class="col-12">
@@ -155,7 +157,8 @@
 										</div>
 
 										<div class="col-5">
-											<button class="btn btn-sm rounded-pill pt-1 px-4" type="submit" id="tweet" onclick="postTweet.tweetCont('@Context.Session.GetInt32("userId")')">Tweet</button>
+											<button class="btn btn-sm rounded-pill pt-1 px-4" type="submit" id="tweet" 
+											onclick="postTweet.tweetCont('@Context.Session.GetInt32("CurrentUserid")')">Tweet</button>
 										</div>
 									</div>
 								</div>
@@ -191,6 +194,6 @@
 		</form>
 		<div class="border rounded-pill border-0">
 		</div>
-		@Html.Partial("~/Views/Home/FollowPV.cshtml")
+		@Html.Partial("~/Views/Home/FollowPV.cshtml")		
 	</div>
 </div>
