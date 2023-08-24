@@ -14,12 +14,12 @@
             url: "/Home/Login", // Login action'ının URL'sini güncelleyin.
             data: { dto: data },
             success: function (response) {
-                // Başarılı cevap geldiyse işlemler yapabilirsiniz.
+                // Başarılı cevap geldiyse
                 window.location.href = "/Home/HomePage";
-                // Örneğin sayfa yenileme veya yönlendirme yapılabilir.
+                //yönlendirme 
             },
             error: function () {
-                // Başarısız cevap geldiyse işlemler yapabilirsiniz.
+                // Başarısız cevap geldiyse
                 alert("Login failed. Invalid username or password.");
             }
             

@@ -209,7 +209,7 @@ namespace Twitter.UI.Controllers
 				if (user.UserRole == "admin")
 				{
 
-					WriteToExcelDoc();
+					WriteToExcelDoc(userService);
 				}
 
 				return RedirectToAction("HomePage");
@@ -299,13 +299,15 @@ namespace Twitter.UI.Controllers
 		/// <summary>
 		/// aylık rapor için excel
 		/// </summary>
-		public void WriteToExcelDoc()
+		public void WriteToExcelDoc(UserService userService)
 		{
+			FollowService followService = new FollowService();
+			TweetService twitterService = new TweetService();
+
 			using (ExcelPackage excel = new ExcelPackage())
 			{
-				excel.Workbook.Worksheets.Add("Worksheet1");
-				excel.Workbook.Worksheets.Add("Worksheet2");
-				excel.Workbook.Worksheets.Add("Worksheet3");
+				excel.Workbook.Worksheets.Add("Monthly Report");
+				excel.Workbook.Worksheets.Add("Users Report");
 
 				//to add a header row
 				List<string[]> headerRow = new List<string[]>()
@@ -317,7 +319,7 @@ namespace Twitter.UI.Controllers
 				string headerRange = "A1:" + Char.ConvertFromUtf32(headerRow[0].Length + 64) + "1";
 
 				// Target a worksheet
-				var worksheet = excel.Workbook.Worksheets["Worksheet1"];
+				var worksheet = excel.Workbook.Worksheets["Monthly Report"];
 
 				// Popular header row data
 				worksheet.Cells[headerRange].LoadFromArrays(headerRow);
@@ -328,7 +330,7 @@ namespace Twitter.UI.Controllers
 				worksheet.Columns.AutoFit(); //autofit
 
 				//write data to rows
-				var date = RegisterDates();
+				var date = RegisterDates(userService);
 				date.Sort();       // Tarihleri eskiden yeniye sıralama
 
 				int dateRows = 2; //date başlangıç satırı
@@ -341,20 +343,71 @@ namespace Twitter.UI.Controllers
 				{
 					worksheet.Cells[dateRows, 1].Value = item; //    ay/yıl
 
-					totalUsers = TotalUsers(item);
+					totalUsers = TotalUsers(item, userService);
 					worksheet.Cells[dateRows, 2].Value = totalUsers;
 
 					userCount += totalUsers;
 					worksheet.Cells[dateRows, 3].Value = userCount; //toplam kullanıcı
 
-					string userHaveMoreFollowers = WhoHaveMoreFollowers(item);
+					string userHaveMoreFollowers = WhoHaveMoreFollowers(item, followService);
 					worksheet.Cells[dateRows, 4].Value = userHaveMoreFollowers; //En çok takipçisi olan kullanıcı
 
-					totalTweets += TotalTweets(item);
+					totalTweets += TotalTweets(item, twitterService);
 					worksheet.Cells[dateRows, 5].Value = totalTweets; //Toplam tweet sayısı
 
 					dateRows++;
 				}
+
+
+				//----------------------Diğer Worksheet--------------------------
+
+
+				//to add a header row
+				List<string[]> headerRowUserDetails = new List<string[]>()
+				{
+					new string[] {"Username", "Takip Edilen", "Takipçi", "Tweet Sayısı", "Bu Ay Atılan Tweetler", "Etkileşim" }
+				};
+
+				// Determine the header range (e.g. A1:G1)
+				string headerRangeUserDetails = "A1:" + Char.ConvertFromUtf32(headerRowUserDetails[0].Length + 64) + "1";
+
+				// Target a worksheet
+				var worksheetUserDetails = excel.Workbook.Worksheets["Users Report"];
+
+				// Popular header row data
+				worksheetUserDetails.Cells[headerRangeUserDetails].LoadFromArrays(headerRowUserDetails);
+
+				//Style the row
+				worksheetUserDetails.Cells[headerRangeUserDetails].Style.Font.Bold = true;
+				worksheetUserDetails.Cells[headerRangeUserDetails].Style.Font.Size = 14;
+				worksheetUserDetails.Columns.AutoFit(); //autofit
+
+				//write data to rows
+				var usernameList = AllUsersList(userService); //tüm usernameler
+
+
+				int dateRowsUserDetails = 2; //date başlangıç satırı
+
+				
+
+				foreach (var item in usernameList)
+				{
+					var userid = userService.GetUserId(item);
+
+					worksheetUserDetails.Cells[dateRowsUserDetails, 1].Value = item;        //username
+
+					worksheetUserDetails.Cells[dateRowsUserDetails, 2].Value = followService.GetUsersFollowing(userid); //takip edilen sayısı
+
+					worksheetUserDetails.Cells[dateRowsUserDetails, 3].Value = followService.GetUsersFollowers(userid); //takipçi sayısı
+
+					worksheetUserDetails.Cells[dateRowsUserDetails, 4].Value = twitterService.GetUserTweets(userid).Count; // tweet sayısı
+
+					worksheetUserDetails.Cells[dateRowsUserDetails, 5].Value = twitterService.GetUsersTweetsThisMonth(userid); // bu ay atılan tweet sayısı
+
+					dateRowsUserDetails++;
+				}
+
+
 
 				FileInfo excelFile = new FileInfo(@"C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\AdminExcel.xlsx");
 				excel.SaveAs(excelFile);
@@ -365,10 +418,8 @@ namespace Twitter.UI.Controllers
 		/// aylık kayıt tarihleri
 		/// </summary>
 		/// <returns>string list</returns>
-		public List<string> RegisterDates()
+		public List<string> RegisterDates(UserService userService)
 		{
-			UserService userService = new UserService();	
-
 			var list = userService.GetRegisterDates();
 
 			return list;
@@ -379,10 +430,8 @@ namespace Twitter.UI.Controllers
 		/// </summary>
 		/// <param name="mounthYear">mm-yyyy</param>
 		/// <returns>int</returns>
-		public int TotalUsers(string mounthYear)
+		public int TotalUsers(string mounthYear, UserService userService)
 		{
-			UserService userService = new UserService();
-
 			var count = userService.UserCount(mounthYear);
 
 			return count;
@@ -393,22 +442,30 @@ namespace Twitter.UI.Controllers
 		/// </summary>
 		/// <param name="mounthYear"></param>
 		/// <returns>username</returns>
-		public string WhoHaveMoreFollowers(string mounthYear)
+		public string WhoHaveMoreFollowers(string mounthYear, FollowService followService)
 		{
-			FollowService followService = new FollowService();	
-
 			string username = followService.WhoHaveMoreFollowers(mounthYear);
 
 			return username;
 		}
 
-		public int TotalTweets(string mounthYear)
+		/// <summary>
+		/// Aylık toplam tweet
+		/// </summary>
+		/// <param name="mounthYear"></param>
+		/// <returns></returns>
+		public int TotalTweets(string mounthYear, TweetService tweetService)
 		{
-			TweetService tweetService = new TweetService();
-
 			int count = tweetService.TweetCount(mounthYear);
 
 			return count;	
+		}
+
+		public List<string> AllUsersList(UserService userService)
+		{
+			var list = userService.GetAllUsersUsername();
+
+			return list;	
 		}
 
 		#endregion

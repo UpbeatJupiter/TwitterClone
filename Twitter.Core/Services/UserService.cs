@@ -167,6 +167,29 @@ namespace Twitter.Core.Services
 			}
 		}
 
+		/// <summary>
+		/// username list getirir
+		/// </summary>
+		/// <returns></returns>
+		public List<string> GetAllUsersUsername()
+		{
+			var usernameList = GetAll().OrderBy(x => x.RegisterDate).Select(x => x.Username).ToList();
+
+			return usernameList;
+		}
+
+		/// <summary>
+		/// username ile userid getirir
+		/// </summary>
+		/// <param name="username"></param>
+		/// <returns></returns>
+		public int GetUserId(string username)
+		{
+			int userId = GetUserByUsername(username).UserId;
+
+			return userId;
+		}
+
 		
 
 		/// <summary>

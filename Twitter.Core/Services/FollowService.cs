@@ -106,5 +106,36 @@ namespace Twitter.Core.Services
 
 			return username;
 		}
+
+		/// <summary>
+		/// takip edilen sayısını getirir
+		/// </summary>
+		/// <param name="username"></param>
+		/// <returns></returns>
+		public int GetUsersFollowing(int userid)
+		{
+			UserService userService = new UserService();
+			int count = _unitOfWork.FollowRepository.GetAll()
+				.Where(record => record.FollowingUserId == userid)
+				.Count();
+
+			return count;
+		}
+
+		/// <summary>
+		/// takipçi sayısını getirir 
+		/// </summary>
+		/// <param name="username"></param>
+		/// <returns></returns>
+		public int GetUsersFollowers(int userid) 
+		{
+			UserService userService = new UserService();
+			int count = _unitOfWork.FollowRepository.GetAll()
+				.Where(record => record.FollowedUserId == userid)
+				.Count();
+
+			return count;
+		}
+
 	}
 }

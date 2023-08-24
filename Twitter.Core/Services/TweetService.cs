@@ -70,6 +70,19 @@ namespace Twitter.Core.Services
 		}
 
 		/// <summary>
+		/// bu ay kullanıcının attığı tweet sayısı
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		public int GetUsersTweetsThisMonth(int id)
+		{
+			var tweetCount = GetAllTweetsWithDateTime().Where(x => x.UserId == id)
+				.Where(x => x.TweetDate == DateTime.Now.Date.ToString("MM-yyyy")).Count();
+
+			return tweetCount;
+		}
+
+		/// <summary>
 		/// takip edilen kullanıcıların tweetleri gelir
 		/// </summary>
 		/// <param name="userid"></param>
@@ -111,6 +124,23 @@ namespace Twitter.Core.Services
 			return list;
 		}
 
+		public List<TweetDto> GetAllTweetsWithDateTime()
+		{
+			var data = _unitOfWork.TweetRepository.GetAll();
+			var list = new List<TweetDto>();
+			if (data != null)
+			{
+				list = data.Select(x => new TweetDto
+				{
+					TweetContent = x.TweetContent,
+					UserId = x.UserId,
+					Username = _unitOfWork.UserRepository.GetUserById(x.UserId).Username,
+					TweetId = x.Id,
+					TweetDate = x.TweetDate.ToString("MM-yyyy")
+				}).ToList();
+			}
+			return list;
+		}
 		/// <summary>
 		/// En son atılan tweet i getirir
 		/// </summary>
