@@ -4,6 +4,7 @@ using DocumentFormat.OpenXml.Packaging;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
+using iTextSharp.text.pdf;
 using iTextSharp.xmp.impl.xpath;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -206,6 +207,7 @@ namespace Twitter.UI.Controllers
 				GetSession(user);
 
 				PdfManipulator(user);
+				ConvertToPdf();
 				if (user.UserRole == "admin")
 				{
 
@@ -216,7 +218,7 @@ namespace Twitter.UI.Controllers
 			}
 			else //kullanıcı bilgileri yanlışsa
 			{
-				return RedirectToAction("Login");
+				return RedirectToAction("Login"); // TODO: ajax error 
 			}
 		}
 		#endregion
@@ -293,6 +295,52 @@ namespace Twitter.UI.Controllers
 
 		#endregion
 
+		private readonly string wordDocumentPath = "result.docx"; // Provide the actual path to your Word document.
+		private readonly string pdfFilePath = @"C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\PdfFiles\resultPDF.pdf"; //PdfFiles adında Twitter.UI a klasör aç
+
+		public void ConvertToPdf()
+		{
+			string pdfFileName = "ConvertedDocument.pdf"; //oluşan pdf
+			string pdfFilePath = Path.Combine(Directory.GetCurrentDirectory(), "PdfFiles", pdfFileName); //çalışan directorynin path i ve pdffiles dosyasını kombine eder
+
+			using (MemoryStream wordStream = new MemoryStream(System.IO.File.ReadAllBytes(wordDocumentPath)))
+			{
+				bool conversionResult = ConvertWordToPdf(wordStream, pdfFilePath);
+
+				if (conversionResult)
+				{
+					byte[] pdfBytes = System.IO.File.ReadAllBytes(pdfFilePath); //pdfbytes
+					
+				}
+				else
+				{
+					Console.WriteLine("Word to PDF conversion failed.");
+				}
+			}
+		}
+
+		public static bool ConvertWordToPdf(Stream wordStream, string pdfFilePath)
+		{
+			using (WordprocessingDocument wordDocument = WordprocessingDocument.Open(wordStream, false))
+			{
+				using (var pdfWriter = new iText.Kernel.Pdf.PdfWriter(pdfFilePath))
+				{
+					using (var pdfDocument = new iText.Kernel.Pdf.PdfDocument(pdfWriter))
+					{
+						using (var document = new iText.Layout.Document(pdfDocument))
+						{
+							foreach (var paragraph in wordDocument.MainDocumentPart.Document.Body.Elements<DocumentFormat.OpenXml.Wordprocessing.Paragraph>())
+							{
+								string text = paragraph.InnerText;
+								document.Add(new iText.Layout.Element.Paragraph(text));
+							}
+						}
+					}
+				}
+			}
+
+			return true;
+		}
 
 		#region WriteToExcel
 

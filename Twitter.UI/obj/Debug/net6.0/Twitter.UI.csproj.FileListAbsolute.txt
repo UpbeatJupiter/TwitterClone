@@ -306,3 +306,14 @@ C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\System.Web
 C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\System.Web.Http.Cors.dll
 C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\Newtonsoft.Json.Bson.dll
 C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\Microsoft.Office.Interop.Excel.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\itext.barcodes.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\itext.forms.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\itext.io.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\itext.kernel.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\itext.layout.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\itext.pdfa.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\itext.sign.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\itext.styledxmlparser.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\itext.svg.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\itext.commons.dll
+C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\bin\Debug\net6.0\Microsoft.DotNet.PlatformAbstractions.dll

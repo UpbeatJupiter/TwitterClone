@@ -24,5 +24,6 @@ namespace Twitter.Data.Entities
 		/// tweetin atılma tarihi
 		/// </summary>
 		public DateTime TweetDate { get; set; }
+
 	}
 }
