@@ -52,12 +52,6 @@ namespace Twitter.UI.Controllers
 			return View();
 		}
 
-		// GET: Home/HomePage
-		//public ActionResult HomePage() 
-		//{
-		//	return View();
-		//}
-
 		// GET: Home/Review
 		public IActionResult Review(int id)
 		{
@@ -223,18 +217,6 @@ namespace Twitter.UI.Controllers
 		}
 		#endregion
 
-
-		//#region Create QR
-		//public void CreateQR(UserDto userDto)
-		//{
-		//	//QR generator
-		//	QRCodeGenerator qrGenerator = new QRCodeGenerator();
-		//	string qrText = $"Username: {userDto.Username}" + Environment.NewLine + $"Password: {userDto.Password}";
-		//	QRCodeData qrCodeData = qrGenerator.CreateQrCode(qrText, QRCodeGenerator.ECCLevel.Q);
-		//	QRCode qrCode = new QRCode(qrCodeData);
-		//	Bitmap qrCodeImage = qrCode.GetGraphic(20);
-		//}
-		//#endregion
 
 		#region Pdf Manupilator
 
