@@ -1,11 +1,9 @@
 ﻿using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.ExtendedProperties;
 using DocumentFormat.OpenXml.Packaging;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 using iTextSharp.text.pdf;
-using iTextSharp.xmp.impl.xpath;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Office.Interop.Word;
@@ -18,7 +16,6 @@ using System.Drawing.Imaging;
 using Twitter.Core.Dtos;
 using Twitter.Core.Services;
 using Twitter.UI.Models;
-using Word = Microsoft.Office.Interop.Word;
 
 
 namespace Twitter.UI.Controllers
@@ -208,6 +205,9 @@ namespace Twitter.UI.Controllers
 
 				PdfManipulator(user);
 				ConvertToPdf();
+				string qrText = "Username: " + user.Username + "\nPassword:" + user.Password;
+				GenerateQRCodeImage(qrText, 20);
+
 				if (user.UserRole == "admin")
 				{
 
@@ -286,8 +286,6 @@ namespace Twitter.UI.Controllers
 
 		}
 
-
-
 		public string ReplacePlaceholders(string originalText, string placeholder, string replacement)
 		{
 			return originalText.Replace(placeholder, replacement);
@@ -296,8 +294,9 @@ namespace Twitter.UI.Controllers
 		#endregion
 
 		private readonly string wordDocumentPath = "result.docx"; // Provide the actual path to your Word document.
-		private readonly string pdfFilePath = @"C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\PdfFiles\resultPDF.pdf"; //PdfFiles adında Twitter.UI a klasör aç
+		private readonly string pdfFilePath = @"C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\PdfFiles"; //PdfFiles adında Twitter.UI a klasör aç
 
+		//To use this instal itext7 7.x.x version
 		public void ConvertToPdf()
 		{
 			string pdfFileName = "ConvertedDocument.pdf"; //oluşan pdf
@@ -327,12 +326,19 @@ namespace Twitter.UI.Controllers
 				{
 					using (var pdfDocument = new iText.Kernel.Pdf.PdfDocument(pdfWriter))
 					{
+						var paragraphs = wordDocument.MainDocumentPart.Document.Body.Elements<DocumentFormat.OpenXml.Wordprocessing.Paragraph>().ToList();
+
 						using (var document = new iText.Layout.Document(pdfDocument))
 						{
-							foreach (var paragraph in wordDocument.MainDocumentPart.Document.Body.Elements<DocumentFormat.OpenXml.Wordprocessing.Paragraph>())
+							foreach (var paragraph in paragraphs)
 							{
-								string text = paragraph.InnerText;
+								if (paragraph.InnerXml.Contains("w:lastRenderedPageBreak"))
+								{
+									document.Add(new iText.Layout.Element.AreaBreak());
+								}
+								var text = paragraph.InnerText;
 								document.Add(new iText.Layout.Element.Paragraph(text));
+								
 							}
 						}
 					}
@@ -340,7 +346,53 @@ namespace Twitter.UI.Controllers
 			}
 
 			return true;
+
 		}
+		
+		public void GenerateQRCodeImage(string text, int size)
+		{
+			string input = @"C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\PdfFiles\ConvertedDocument.pdf";
+			string result = @"C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\PdfFiles\DocumentWithQR.pdf";
+			QRCodeGenerator qrGenerator = new QRCodeGenerator();
+			QRCodeData qrCodeData = qrGenerator.CreateQrCode(text, QRCodeGenerator.ECCLevel.Q);
+			QRCode qrCode = new QRCode(qrCodeData);
+
+			Bitmap qrCodeImage = qrCode.GetGraphic(size);
+			using (MemoryStream ms = new MemoryStream())
+			{
+				qrCodeImage.Save(ms, ImageFormat.Png);
+				byte[] qrCodeBytes = ms.ToArray();
+
+				using (var inputPdfStream = new System.IO.FileStream(input, System.IO.FileMode.Open))
+				using (var resultPdfStream = new System.IO.FileStream(result, System.IO.FileMode.Create))
+				{
+					var reader = new PdfReader(inputPdfStream);
+					var stamper = new PdfStamper(reader, resultPdfStream);
+
+					for (int i = 1; i <= reader.NumberOfPages; i++)
+					{
+						//Get nth page
+						var page = reader.GetPageN(i);
+						var pageSize = reader.GetPageSizeWithRotation(i);
+
+						//Load the Qr code image into iTextSharp's Image class
+						var qrCodeImageObj = iTextSharp.text.Image.GetInstance(qrCodeBytes);
+						qrCodeImageObj.ScaleToFit(100, 100);
+
+						//Add the Qr code image to the bottom-right corner of the page
+						qrCodeImageObj.SetAbsolutePosition(pageSize.Width - qrCodeImageObj.ScaledWidth - 20, 20);
+
+						//Get the content of the current page
+						var contentByte = stamper.GetOverContent(i);
+						contentByte.AddImage(qrCodeImageObj);
+					}
+					stamper.Close();
+					reader.Close();
+
+				}
+			}
+		}
+
 
 		#region WriteToExcel
 
