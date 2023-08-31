@@ -7,7 +7,7 @@ using Twitter.Data.Entities;
 
 namespace Twitter.Data.Repositories
 {
-	public interface IFollowRepository: IGenericRepository<Follow>
+	public interface IFollowRepository : IGenericRepository<Follow>
 	{
 		void AddFollowedUser(Follow follow);
 		void DeleteFollowedUser(Follow follow);

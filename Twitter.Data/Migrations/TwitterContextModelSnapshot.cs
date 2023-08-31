@@ -46,6 +46,29 @@ namespace Twitter.Data.Migrations
                     b.ToTable("Follows");
                 });
 
+            modelBuilder.Entity("Twitter.Data.Entities.Interaction", b =>
+                {
+                    b.Property<int>("InteractionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InteractionId"));
+
+                    b.Property<int>("TweetId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("InteractionId");
+
+                    b.HasIndex("TweetId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Interactions");
+                });
+
             modelBuilder.Entity("Twitter.Data.Entities.Tweet", b =>
                 {
                     b.Property<int>("Id")
@@ -125,6 +148,24 @@ namespace Twitter.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Twitter.Data.Entities.Interaction", b =>
+                {
+                    b.HasOne("Twitter.Data.Entities.Tweet", "Tweet")
+                        .WithMany("Interactions")
+                        .HasForeignKey("TweetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Twitter.Data.Entities.User", "User")
+                        .WithMany("Interactions")
+                        .HasForeignKey("UserId")
+                        .IsRequired();
+
+                    b.Navigation("Tweet");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Twitter.Data.Entities.Tweet", b =>
                 {
                     b.HasOne("Twitter.Data.Entities.User", "User")
@@ -136,9 +177,16 @@ namespace Twitter.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Twitter.Data.Entities.Tweet", b =>
+                {
+                    b.Navigation("Interactions");
+                });
+
             modelBuilder.Entity("Twitter.Data.Entities.User", b =>
                 {
                     b.Navigation("Follows");
+
+                    b.Navigation("Interactions");
 
                     b.Navigation("Tweets");
                 });

@@ -29,6 +29,10 @@
       "PackagePath": "staticwebassets\\js\\followTheme.js"
     },
     {
+      "Id": "C:\\Users\\Elif Tuncer\\source\\repos\\Twitter\\Twitter.UI\\wwwroot\\js\\interaction.js",
+      "PackagePath": "staticwebassets\\js\\interaction.js"
+    },
+    {
       "Id": "C:\\Users\\Elif Tuncer\\source\\repos\\Twitter\\Twitter.UI\\wwwroot\\js\\login.js",
       "PackagePath": "staticwebassets\\js\\login.js"
     },

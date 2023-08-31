@@ -57,6 +57,7 @@ namespace Twitter.Data.Entities
 
         public ICollection<Tweet> Tweets { get; set; }
 		public ICollection<Follow> Follows { get; set; }
+		public ICollection<Interaction> Interactions { get; set; }
 
 	}
 }

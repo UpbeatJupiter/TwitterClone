@@ -8,6 +8,7 @@ namespace Twitter.Data.UnitOfWork
 		IUserRepository UserRepository { get; }
 		ITweetRepository TweetRepository { get; }
 		IFollowRepository FollowRepository { get; }
+		IinteractionRepository InteractionRepository { get; }
 
 		/// <summary>
 		/// Commits all changes

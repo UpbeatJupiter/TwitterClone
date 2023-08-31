@@ -1,8 +1,10 @@
-﻿@model Twitter.Core.Dtos.UserDto
+﻿@using Twitter.Core.Dtos;
+@model Twitter.Core.Dtos.UserDto
 
 @{
 	Layout = null;
 	ViewData["Title"] = "Home Page";
+	List<InteractionDto> likes = ViewBag.Like as List<InteractionDto>;
 }
 @if (ViewBag.Tweets != null)
 {
@@ -23,12 +25,12 @@
 								<div class="col-12 col-md-8">
 									@for (int i = 0; i < ViewBag.Username.Count; i++)
 									{
-										if (ViewBag.Username[i] == ViewBag.Tweets[item].Username) // düzenle
+										if (ViewBag.Username[i] == ViewBag.Tweets[item].Username)
 										{
-											<b><span>@ViewBag.Username[i]</span></b> 
+											<b><span>@ViewBag.Username[i]</span></b>
 											<span>
-												<i class="fa-solid fa-circle" 
-												style="color: rgb(83, 100, 113); font-size: 25%; margin: 3%; vertical-align: middle;"></i>
+												<i class="fa-solid fa-circle"
+												   style="color: rgb(83, 100, 113); font-size: 25%; margin: 3%; vertical-align: middle;"></i>
 												<span id="time">@ViewBag.Tweets[item].TweetDate</span>
 											</span>
 											break;
@@ -39,9 +41,9 @@
 									@if (Context.Session.GetInt32("CurrentUserid").Value == ViewBag.Tweets[item].UserId)
 									{
 										<span>
-											<i class="fa-solid fa-xmark fs-5 py-1" style="color: rgb(83, 100, 113);" 
-											onclick="deleteTweet.deleteTweet('@ViewBag.Tweets[item].TweetId','@ViewBag.Tweets[item].UserId')"></i>
-											</span>
+											<i class="fa-solid fa-xmark fs-5 py-1" style="color: rgb(83, 100, 113);"
+											   onclick="deleteTweet.deleteTweet('@ViewBag.Tweets[item].TweetId','@ViewBag.Tweets[item].UserId')"></i>
+										</span>
 									}
 									else
 									{
@@ -67,7 +69,32 @@
 											<span><i class="fa-solid fa-retweet fs-5 py-1" style="color: rgb(83, 100, 113);"></i></span>
 										</div>
 										<div class="col-2">
-											<span><i class="fa-regular fa-heart fs-5 py-1" style="color: rgb(83, 100, 113);"></i></span>
+											@if (ViewBag.Like.Count == 0)
+											{
+												<span>
+													<i class="fa-regular fa-heart fs-5 py-1" style="color: rgb(83, 100, 113);"
+													   onclick="interaction.like('@Context.Session.GetInt32("CurrentUserid")', '@ViewBag.Tweets[item].TweetId')"></i>
+												</span>
+											}
+											else
+											{//TODO: tüm logic
+												if (likes.Any(like => like.TweetId == ViewBag.Tweets[item].TweetId)) //giriş yapan kullanıcı o tweeti beğendiyse
+												{
+													<span>
+														<i class="fa-solid fa-heart fs-5 py-1" style="color: red;"
+														   onclick="interaction.unlike('@Context.Session.GetInt32("CurrentUserid")', '@ViewBag.Tweets[item].TweetId')"></i>
+													</span>
+												}
+												else //beğenmediyse
+												{
+													<span>
+														<i class="fa-regular fa-heart fs-5 py-1" style="color: rgb(83, 100, 113);"
+														   onclick="interaction.like('@Context.Session.GetInt32("CurrentUserid")', '@ViewBag.Tweets[item].TweetId')"></i>
+													</span>
+												}
+
+											}
+
 										</div>
 										<div class="col-2">
 											<span><i class="fa-solid fa-face-smile fs-5 py-1" style="color: rgb(83, 100, 113);"></i></span>

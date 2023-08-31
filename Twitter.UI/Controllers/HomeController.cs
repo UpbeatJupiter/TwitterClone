@@ -3,6 +3,7 @@ using DocumentFormat.OpenXml.Packaging;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
+using Humanizer;
 using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -263,9 +264,6 @@ namespace Twitter.UI.Controllers
 					}
 				}
 			}
-
-
-
 		}
 
 		public string ReplacePlaceholders(string originalText, string placeholder, string replacement)
@@ -273,7 +271,7 @@ namespace Twitter.UI.Controllers
 			return originalText.Replace(placeholder, replacement);
 		}
 
-		#endregion
+		
 
 		private readonly string wordDocumentPath = "result.docx"; // Provide the actual path to your Word document.
 		private readonly string pdfFilePath = @"C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\PdfFiles"; //PdfFiles adında Twitter.UI a klasör aç
@@ -374,6 +372,8 @@ namespace Twitter.UI.Controllers
 				}
 			}
 		}
+
+		#endregion
 
 
 		#region WriteToExcel
@@ -559,6 +559,7 @@ namespace Twitter.UI.Controllers
 		{
 			TweetService tweetService = new TweetService();
 			UserService userService = new UserService();
+			InteractionService interactionService = new InteractionService();
 
 			var username = HttpContext.Session.GetString("CurrentUsername");
 
@@ -577,6 +578,8 @@ namespace Twitter.UI.Controllers
 
 				//giriş yapan kullanıcının takip ettiği kullanıcılar listesi
 				List<TweetDto> followedUserTweets = tweetService.GetFollowedTweets(dto.UserId);
+
+				ViewBag.Like = interactionService.GetUserLikedTweets(dto.UserId).ToList();
 
 				#region Session
 
@@ -601,11 +604,12 @@ namespace Twitter.UI.Controllers
 
 					//takip edilen kullanıcı varsa onların userid listesi = null
 					ViewBag.FollowedUserList = followedUserTweets.Select(x => x.UserId).ToList();
+					ViewBag.Like = interactionService.GetUserLikedTweets(dto.UserId).ToList();
 
 				}
 				else //giriş yapan kullanıcının takip ettiği kullanıcılar varsa
 				{
-					ListOfTweetsMethod(tweetList, followedUserTweets, userService);
+					ListOfTweetsMethod(tweetList, followedUserTweets, userService, interactionService);
 
 					//takip edilen kullanıcıların userid listesi
 					ViewBag.FollowedUserList = followedUserTweets.Select(x => x.UserId).ToList();
@@ -625,6 +629,7 @@ namespace Twitter.UI.Controllers
 		{
 			UserService userService = new UserService();
 			TweetService tweetService = new TweetService();
+			InteractionService interactionService = new InteractionService();	
 
 			UserDto userDto = userService.GetUserById(myUserId);
 
@@ -634,7 +639,7 @@ namespace Twitter.UI.Controllers
 			//takip ettiği kullanıcıların tweetlerini getirir
 			List<TweetDto> followedUserTweets = tweetService.GetFollowedTweets(userDto.UserId);
 
-			ListOfTweetsMethod(tweetList, followedUserTweets, userService);
+			ListOfTweetsMethod(tweetList, followedUserTweets, userService, interactionService);
 
 			return View("AllTweetPV", userDto);
 		}
@@ -731,6 +736,40 @@ namespace Twitter.UI.Controllers
 		}
 		#endregion
 
+		#region Like Tweet
+
+		[HttpPost]
+		public JsonResult LikeTweet(int userid, int tweetid)
+		{
+			if(userid != 0 && tweetid != 0)
+			{
+				InteractionService interactionService = new InteractionService();
+
+				interactionService.AddLikeInteraction(userid, tweetid);
+
+				return Json(true);
+			}
+			return Json(false);
+		}
+		#endregion
+
+		#region UnLike Tweet
+
+		[HttpPost]
+		public JsonResult UnlikeTweet(int userid, int tweetid)
+		{
+			if(userid !=0 && tweetid != 0)
+			{
+				InteractionService interactionService = new InteractionService();
+
+				interactionService.RemoveLikeInteraction(userid, tweetid);
+
+				return Json(true);
+			}
+			return Json(false);
+		}
+		#endregion
+
 		#region Followed and My Tweets
 		/// <summary>
 		/// Takip edilen kullanıcıların ve kendi tweetlerimizi getirir.
@@ -739,7 +778,7 @@ namespace Twitter.UI.Controllers
 		/// <param name="followedList"></param>
 		/// <param name="userService"></param>
 		/// <param name="dto"></param>
-		public void ListOfTweetsMethod(List<TweetDto> myTweetList, List<TweetDto> myFollowedList, UserService userService)
+		public void ListOfTweetsMethod(List<TweetDto> myTweetList, List<TweetDto> myFollowedList, UserService userService, InteractionService interactionService)
 		{
 			List<TweetDto> tweets = new List<TweetDto>();
 
@@ -771,6 +810,8 @@ namespace Twitter.UI.Controllers
 			}
 
 			ViewBag.Username = usernameList;
+			int myuserid = myTweetList.Select(x => x.UserId).FirstOrDefault();
+			ViewBag.Like = interactionService.GetUserLikedTweets(myuserid).ToList();
 		}
 		#endregion
 

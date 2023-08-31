@@ -11,6 +11,7 @@ namespace Twitter.Data.UnitOfWork
 		private IUserRepository _userRepo;
 		private ITweetRepository _tweetRepo;
 		private IFollowRepository _followRepo;
+		private IinteractionRepository _interactionRepo;
 		public IUserRepository UserRepository
 		{
 			get { return _userRepo = _userRepo ?? new UserRepository(_context); }
@@ -24,7 +25,11 @@ namespace Twitter.Data.UnitOfWork
 			get { return _followRepo = _followRepo ?? new FollowRepository(_context); }
 		}
 
-		
+		public IinteractionRepository InteractionRepository
+		{
+			get { return _interactionRepo = _interactionRepo ?? new InteractionRepository(_context); }
+		}
+
 		public UnitOfWork()
 		{
 			_context = new TwitterContext();

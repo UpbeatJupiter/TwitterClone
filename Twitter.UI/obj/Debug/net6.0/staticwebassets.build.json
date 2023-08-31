@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "+jhzXid6EjQi7Xmd+vuFzeEvmnrI523fzico3gnCK4M=",
+  "Hash": "IV6BlZtvqHhcQtp8mdrdVfzcAKB2OovN7LXSPBQ4bfU=",
   "Source": "Twitter.UI",
   "BasePath": "_content/Twitter.UI",
   "Mode": "Default",
@@ -151,6 +151,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\followTheme.js"
+    },
+    {
+      "Identity": "C:\\Users\\Elif Tuncer\\source\\repos\\Twitter\\Twitter.UI\\wwwroot\\js\\interaction.js",
+      "SourceId": "Twitter.UI",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Elif Tuncer\\source\\repos\\Twitter\\Twitter.UI\\wwwroot\\",
+      "BasePath": "_content/Twitter.UI",
+      "RelativePath": "js/interaction.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\interaction.js"
     },
     {
       "Identity": "C:\\Users\\Elif Tuncer\\source\\repos\\Twitter\\Twitter.UI\\wwwroot\\js\\login.js",

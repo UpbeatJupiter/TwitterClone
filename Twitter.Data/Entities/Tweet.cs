@@ -25,5 +25,6 @@ namespace Twitter.Data.Entities
 		/// </summary>
 		public DateTime TweetDate { get; set; }
 
+		public ICollection<Interaction> Interactions { get; set; }
 	}
 }
