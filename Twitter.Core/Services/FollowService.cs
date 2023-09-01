@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Twitter.Core.Dtos;
+﻿using Twitter.Core.Dtos;
 using Twitter.Data.Entities;
 using Twitter.Data.UnitOfWork;
 

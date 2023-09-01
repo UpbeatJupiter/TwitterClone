@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Graph;
-using System.Globalization;
-using System.Security.Claims;
+﻿using System.Globalization;
 using Twitter.Core.Dtos;
 using Twitter.Data.Entities;
 using Twitter.Data.UnitOfWork;

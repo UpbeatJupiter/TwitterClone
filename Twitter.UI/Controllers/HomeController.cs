@@ -3,11 +3,9 @@ using DocumentFormat.OpenXml.Packaging;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
-using Humanizer;
 using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Office.Interop.Word;
 using NonFactors.Mvc.Grid;
 using OfficeOpenXml;
 using QRCoder;
@@ -41,9 +39,8 @@ namespace Twitter.UI.Controllers
 		// GET: Home/Logout
 		public IActionResult Logout()
 		{
-			//HttpContext.Session.Remove("user");
 			HttpContext.Session.Clear();
-			//HttpContext.SignOutAsync();
+
 			return RedirectToAction("Login");
 		}
 
@@ -57,6 +54,7 @@ namespace Twitter.UI.Controllers
 		public IActionResult Review(int id)
 		{
 			ViewBag.id = id;
+
 			return View("Review");
 		}
 
@@ -64,6 +62,10 @@ namespace Twitter.UI.Controllers
 
 		#region Export
 		// GET: Home/AdminExportFile
+		/// <summary>
+		/// Admin için bugün kaydolan kullanıcıları getirir
+		/// </summary>
+		/// <returns></returns>
 		public IActionResult AdminExportFile()
 		{
 			UserService userService = new UserService();
@@ -156,6 +158,11 @@ namespace Twitter.UI.Controllers
 
 		public const string SessionKeyName = "CurrentUsername";
 		public const string SessionKeyId = "CurrentUserid";
+
+		/// <summary>
+		/// İstenilen kullanıcı için Session oluşturur
+		/// </summary>
+		/// <param name="user"></param>
 		public void GetSession(UserDto user)
 		{
 
@@ -196,13 +203,18 @@ namespace Twitter.UI.Controllers
 				//username ile userdto oluşturulur
 				UserDto user = userService.GetUserByUsername(dto.Username);
 
+				//kullanıcıya session atanır
 				GetSession(user);
 
+				//kullanıcı için pdf oluşturulur
 				PdfManipulator(user);
 				ConvertToPdf();
+
+				//pdf e qr eklenir
 				string qrText = "Username: " + user.Username + "\nPassword:" + user.Password;
 				GenerateQRCodeImage(qrText, 20);
 
+				//kullanıcı admin ise excel e aylık veriler konur
 				if (user.UserRole == "admin")
 				{
 
@@ -228,16 +240,6 @@ namespace Twitter.UI.Controllers
 			string resultPDF = "resultPDF.pdf";
 
 			string qrImagePath = "output.png";  // Path to save the PNG image
-
-			//QR generator
-			QRCodeGenerator qrGenerator = new QRCodeGenerator();
-			string qrText = $"Username: {userDto.Username}" + Environment.NewLine + $"Password: {userDto.Password}";
-			QRCodeData qrCodeData = qrGenerator.CreateQrCode(qrText, QRCodeGenerator.ECCLevel.Q);
-			QRCode qrCode = new QRCode(qrCodeData);
-			Bitmap qrCodeImage = qrCode.GetGraphic(20);
-
-			// Save the BMP image as a PNG image
-			qrCodeImage.Save(qrImagePath, ImageFormat.Png);
 
 			using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(input, false)) // Open in read-only mode
 			{
@@ -266,6 +268,13 @@ namespace Twitter.UI.Controllers
 			}
 		}
 
+		/// <summary>
+		/// istenilen değeri belirtilmiş değerin yerine yazar
+		/// </summary>
+		/// <param name="originalText"></param>
+		/// <param name="placeholder"></param>
+		/// <param name="replacement"></param>
+		/// <returns></returns>
 		public string ReplacePlaceholders(string originalText, string placeholder, string replacement)
 		{
 			return originalText.Replace(placeholder, replacement);
@@ -277,6 +286,9 @@ namespace Twitter.UI.Controllers
 		private readonly string pdfFilePath = @"C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\PdfFiles"; //PdfFiles adında Twitter.UI a klasör aç
 
 		//To use this instal itext7 7.x.x version
+		/// <summary>
+		/// word docx'e çevirilen pdfi pdfbyte a çevirir
+		/// </summary>
 		public void ConvertToPdf()
 		{
 			string pdfFileName = "ConvertedDocument.pdf"; //oluşan pdf
@@ -298,6 +310,12 @@ namespace Twitter.UI.Controllers
 			}
 		}
 
+		/// <summary>
+		/// istenilen word dosyasını pdf e çevirir
+		/// </summary>
+		/// <param name="wordStream">input word docx</param>
+		/// <param name="pdfFilePath">result pdf path</param>
+		/// <returns></returns>
 		public static bool ConvertWordToPdf(Stream wordStream, string pdfFilePath)
 		{
 			using (WordprocessingDocument wordDocument = WordprocessingDocument.Open(wordStream, false))
@@ -329,6 +347,11 @@ namespace Twitter.UI.Controllers
 
 		}
 		
+		/// <summary>
+		/// Qr Code yaratır
+		/// </summary>
+		/// <param name="text">qr text</param>
+		/// <param name="size">qr size</param>
 		public void GenerateQRCodeImage(string text, int size)
 		{
 			string input = @"C:\Users\Elif Tuncer\source\repos\Twitter\Twitter.UI\PdfFiles\ConvertedDocument.pdf";
@@ -567,8 +590,6 @@ namespace Twitter.UI.Controllers
 			{
 				UserDto dto = userService.GetUserByUsername(username);
 
-				GetSession(dto);
-
 				//giriş yapan kullanıcının tüm tweetleri 
 				List<TweetDto> tweetList = tweetService.GetUserTweets(dto.UserId);
 
@@ -660,10 +681,6 @@ namespace Twitter.UI.Controllers
 			tweetService.AddTweet(tweetdto);
 
 			return Json(true);
-
-			////tweetin idsini dbye kaydettikten sonra alır
-			//tweetdto.TweetId = tweetService.GetLastTweet().TweetId;
-
 		}
 		#endregion
 

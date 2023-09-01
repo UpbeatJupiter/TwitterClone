@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Twitter.Core.Dtos;
+﻿using Twitter.Core.Dtos;
 using Twitter.Data.Entities;
 using Twitter.Data.UnitOfWork;
 
