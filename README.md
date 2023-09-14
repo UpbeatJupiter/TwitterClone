@@ -18,6 +18,7 @@ This application is a simple Twitter clone built using ASP.NET MVC and C#. It al
 ![Admin Page](image-2.png)
 ![Overview of today's registered users](image-5.png)
 ![Export to excel](image-6.png)
+![Send Email](image-7.png)
 
 
 
