@@ -6,6 +6,7 @@ using Google.Apis.Sheets.v4.Data;
 using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Office.Interop.Word;
 using NonFactors.Mvc.Grid;
 using OfficeOpenXml;
 using QRCoder;
@@ -15,7 +16,10 @@ using System.Drawing.Imaging;
 using Twitter.Core.Dtos;
 using Twitter.Core.Services;
 using Twitter.UI.Models;
-
+using System.IO;
+using System.Net;
+using System.Net.Mail;
+using Twitter.UI.GlobalConsts;
 
 namespace Twitter.UI.Controllers
 {
@@ -149,6 +153,7 @@ namespace Twitter.UI.Controllers
 		{
 			UserService userService = new UserService();
 			userService.AddUser(dto);
+			SendMail(dto.Name);
 
 			return Json(new { success = true });
 		}
@@ -176,6 +181,32 @@ namespace Twitter.UI.Controllers
 
 			_logger.LogInformation("Session Username: {currentUsername}", currentUsername);
 			_logger.LogInformation("Session User id: {currentUserid}", currentUserid);
+
+		}
+
+		#endregion
+
+		#region Registeration Mail
+
+		public void SendMail(string name)
+		{
+			var smtpClient = new SmtpClient("smtp.gmail.com")
+			{
+				Port = 587,
+				Credentials = new NetworkCredential(CommonVariables.adminMail, CommonVariables.adminPassword),
+				EnableSsl = true,
+			};
+
+			var mailMessage = new System.Net.Mail.MailMessage
+            {
+				From = new MailAddress(CommonVariables.adminMail),
+				Subject = "Recently Registered User",
+				Body = "<h1>Hello " + name.ToUpper() + "</h1>" + "\n" + "<p>" + CommonVariables.registerationMailContent + "</p>",
+				IsBodyHtml = true,
+			};
+			mailMessage.To.Add(CommonVariables.adminMail);
+
+			smtpClient.Send(mailMessage);
 
 		}
 
@@ -608,7 +639,7 @@ namespace Twitter.UI.Controllers
 
 				#endregion
 
-				//giriş yapan kullanıcının hiçbir takip ettiği kullanıcı yoksa
+				//giriş yapan kullanıcının takip ettiği kullanıcı yoksa
 				if (followedUserTweets == null)
 				{
 					//kullanıcının tüm tweetlerini yeniden eskiye doğru sıralar
