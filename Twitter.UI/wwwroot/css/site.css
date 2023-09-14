@@ -8,11 +8,15 @@ span {
     margin-left: 20px;
 }
 
+.left-side-bar:hover {
+    background-color: #a9a9a92b;
+    border-radius: 50px;
+}
+
 #tweet {
     background-color: #1d9bf0;
     color: white;
     text-align: center;
-    
 }
 
 /*who stop follow*/
@@ -104,9 +108,9 @@ span {
     justify-content: space-between;
 }
 
-#whoToFollow .profile:hover, .show-more:hover {
-    background-color: var(--secondary-bg);
-}
+    #whoToFollow .profile:hover, .show-more:hover {
+        background-color: var(--secondary-bg);
+    }
 
 #whoToFollow .profile-pic {
     display: block;
@@ -132,9 +136,9 @@ span {
     color: rgb(155, 153, 153);
 }
 
-#whoToFollow .username::before {
-    content: '@';
-}
+    #whoToFollow .username::before {
+        content: '@';
+    }
 
 #whoToFollow .follow-button {
     background-color: black;
@@ -166,9 +170,9 @@ span {
     color: var(--highlight-color);
 }
 
-#whoToFollow .show-more:focus {
-     -webkit-tap-highlight-color: transparent;
-}
+    #whoToFollow .show-more:focus {
+        -webkit-tap-highlight-color: transparent;
+    }
 
 #whoToFollow .themer {
     background-color: var(--primary-bg);
@@ -192,7 +196,7 @@ span {
     float: left;
     width: 55%;
     margin-top: 6px;
-    padding-left:0;
+    padding-left: 0;
 }
 
 
@@ -227,4 +231,10 @@ input[type=submit] {
     cursor: pointer;
     padding: 9px;
     float: right;
+}
+
+@media screen and (max-width:1200px) {
+    #left-side-bar-text {
+        display: none;
+    }
 }

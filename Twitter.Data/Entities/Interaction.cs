@@ -25,6 +25,6 @@ namespace Twitter.Data.Entities
 		public int TweetId { get; set; }
 		public Tweet Tweet { get; set; }	
 
-		
+		public string InteractionType { get; set; }	
 	}
 }

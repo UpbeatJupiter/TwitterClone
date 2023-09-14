@@ -13,5 +13,10 @@
 		/// hangi tweet beğenildi
 		/// </summary>
 		public int TweetId { get; set; }	
+
+		/// <summary>
+		/// etkileşim türü
+		/// </summary>
+		public string InteractionType { get; set; }
 	}
 }
