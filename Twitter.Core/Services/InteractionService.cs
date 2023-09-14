@@ -69,10 +69,10 @@ namespace Twitter.Core.Services
 
 
 		/// <summary>
-		/// Tweet likelandığında user id ve tweet id db ye eklenir
+		/// Tweet repostlandığında user id ve tweet id db ye eklenir
 		/// </summary>
-		/// <param name="userId">tweeti beğenen kullanıcı id</param>
-		/// <param name="tweetId">beğenilen tweet id</param>
+		/// <param name="userId">tweeti repostlayan kullanıcı id</param>
+		/// <param name="tweetId">repostlanan tweet id</param>
 		public void AddRepostInteraction(int userId, int tweetId)
 		{
 			var interaction = new Interaction
@@ -88,10 +88,10 @@ namespace Twitter.Core.Services
 		}
 
 		/// <summary>
-		/// Like geri çekildiğinde db den silinir
+		/// repost geri çekildiğinde db den silinir
 		/// </summary>
-		/// <param name="userId">tweet beğenisini silen kullanıcı id</param>
-		/// <param name="tweetId">beğeni çekilen tweet id</param>
+		/// <param name="userId">tweet repostunu silen kullanıcı id</param>
+		/// <param name="tweetId">repostu çekilen tweet id</param>
 		public void RemoveRepostInteraction(int userId, int tweetId)
 		{
 			var interaction = _unitOfWork.InteractionRepository.GetAll()

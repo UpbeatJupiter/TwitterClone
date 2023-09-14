@@ -6,20 +6,18 @@ using Google.Apis.Sheets.v4.Data;
 using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Office.Interop.Word;
 using NonFactors.Mvc.Grid;
 using OfficeOpenXml;
 using QRCoder;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
-using Twitter.Core.Dtos;
-using Twitter.Core.Services;
-using Twitter.UI.Models;
-using System.IO;
 using System.Net;
 using System.Net.Mail;
+using Twitter.Core.Dtos;
+using Twitter.Core.Services;
 using Twitter.UI.GlobalConsts;
+using Twitter.UI.Models;
 
 namespace Twitter.UI.Controllers
 {
@@ -261,7 +259,6 @@ namespace Twitter.UI.Controllers
 		}
 		#endregion
 
-
 		#region Pdf Manupilator
 
 		public void PdfManipulator(UserDto userDto)
@@ -428,7 +425,6 @@ namespace Twitter.UI.Controllers
 		}
 
 		#endregion
-
 
 		#region WriteToExcel
 
@@ -606,7 +602,6 @@ namespace Twitter.UI.Controllers
 
 		#endregion
 
-
 		#region HomePage
 		//GET: /Home/HomePage
 		public IActionResult HomePage()
@@ -632,6 +627,7 @@ namespace Twitter.UI.Controllers
 				List<TweetDto> followedUserTweets = tweetService.GetFollowedTweets(dto.UserId);
 
 				ViewBag.Like = interactionService.GetUserLikedTweets(dto.UserId).ToList();
+				ViewBag.Repost = interactionService.GetUserRepostedTweets(dto.UserId).ToList();
 
 				#region Session
 
@@ -657,7 +653,7 @@ namespace Twitter.UI.Controllers
 					//takip edilen kullanıcı varsa onların userid listesi = null
 					ViewBag.FollowedUserList = followedUserTweets.Select(x => x.UserId).ToList();
 					ViewBag.Like = interactionService.GetUserLikedTweets(dto.UserId).ToList();
-
+					ViewBag.Repost = interactionService.GetUserRepostedTweets(dto.UserId).ToList();
 				}
 				else //giriş yapan kullanıcının takip ettiği kullanıcılar varsa
 				{
@@ -818,6 +814,40 @@ namespace Twitter.UI.Controllers
 		}
 		#endregion
 
+		#region Repost Tweet
+
+		[HttpPost]
+		public JsonResult RepostTweet(int userid, int tweetid)
+		{
+			if (userid != 0 && tweetid != 0)
+			{
+				InteractionService interactionService = new InteractionService();
+
+				interactionService.AddRepostInteraction(userid, tweetid);
+
+				return Json(true);
+			}
+			return Json(false);
+		}
+		#endregion
+
+		#region UnRepost Tweet
+
+		[HttpPost]
+		public JsonResult UnrepostTweet(int userid, int tweetid)
+		{
+			if (userid != 0 && tweetid != 0)
+			{
+				InteractionService interactionService = new InteractionService();
+
+				interactionService.RemoveRepostInteraction(userid, tweetid);
+
+				return Json(true);
+			}
+			return Json(false);
+		}
+		#endregion
+
 		#region Followed and My Tweets
 		/// <summary>
 		/// Takip edilen kullanıcıların ve kendi tweetlerimizi getirir.
@@ -860,6 +890,7 @@ namespace Twitter.UI.Controllers
 			ViewBag.Username = usernameList;
 			int myuserid = myTweetList.Select(x => x.UserId).FirstOrDefault();
 			ViewBag.Like = interactionService.GetUserLikedTweets(myuserid).ToList();
+			ViewBag.Repost = interactionService.GetUserRepostedTweets(myuserid).ToList();
 		}
 		#endregion
 
