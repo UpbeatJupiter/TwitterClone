@@ -13,6 +13,26 @@ span {
     border-radius: 50px;
 }
 
+.commentShareHover:hover {
+    background-color: rgb(29, 155, 240, 0.14);
+    color: rgb(29,155,240);
+    border-radius: 50%;
+    transition-duration: 0.4s;
+}
+
+.likedHover:hover {
+    background-color: #dc354521;
+    color: #dc3545;
+    border-radius: 50%;
+    transition-duration: 0.4s;
+}
+
+.repostHover:hover {
+    background-color: #19875421;
+    color: #198754;
+    border-radius: 50%;
+    transition-duration: 0.4s;
+}
 
 #tweet {
     background-color: #1d9bf0;

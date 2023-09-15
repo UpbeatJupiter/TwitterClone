@@ -19,7 +19,7 @@
 							 alt="Generic placeholder image" class="img-fluid rounded-circle">
 					</div>
 				</div>
-				<div class="col-xs-8 col-md-10 fs-4 ">
+				<div class="col-xs-8 col-md-10 fs-5">
 					<div class="row">
 						<div class="col-12">
 							<div class="row">
@@ -64,13 +64,13 @@
 								<div class="col-12">
 									<div class="row" style="flex-flow: row;">
 										<div class="col-2">
-											<span><i class="fa-regular fa-comment fs-5 py-1" style="color: rgb(83, 100, 113);"></i></span>
+											<span><i class="fa-regular fa-comment fs-5 py-2 px-2 commentShareHover"></i></span>
 										</div>
 										<div class="col-2">
 											@if (ViewBag.Repost.Count == 0)
 											{
 												<span>
-													<i class="fa-solid fa-retweet fs-5 py-1" style="color: rgb(83, 100, 113);"
+													<i class="fa-solid fa-retweet fs-5 py-2 px-2 repostHover"
 													   onclick="interaction.repost('@Context.Session.GetInt32("CurrentUserid")', '@ViewBag.Tweets[item].TweetId')"></i>
 												</span>
 											}
@@ -79,14 +79,14 @@
 												if (reposts.Any(reposts => reposts.TweetId == ViewBag.Tweets[item].TweetId)) //giriş yapan kullanıcı o tweeti repostladıysa
 												{
 													<span>
-														<i class="fa-solid fa-retweet fs-5 py-1" style="color: rgb(0, 186, 124);"
+														<i class="fa-solid fa-retweet fs-5 py-2 px-2 repostHover" style="color: rgb(0, 186, 124);"
 														   onclick="interaction.unrepost('@Context.Session.GetInt32("CurrentUserid")', '@ViewBag.Tweets[item].TweetId')"></i>
 													</span>
 												}
 												else //repostlamadıysa
 												{
 													<span>
-														<i class="fa-solid fa-retweet fs-5 py-1" style="color: rgb(83, 100, 113);"
+														<i class="fa-solid fa-retweet fs-5 py-2 px-2 repostHover" 
 														   onclick="interaction.repost('@Context.Session.GetInt32("CurrentUserid")', '@ViewBag.Tweets[item].TweetId')"></i>
 													</span>
 												}
@@ -97,7 +97,7 @@
 											@if (ViewBag.Like.Count == 0)
 											{
 												<span>
-													<i class="fa-regular fa-heart fs-5 py-1" style="color: rgb(83, 100, 113);"
+													<i class="fa-regular fa-heart fs-5 py-2 px-2 likedHover"
 													   onclick="interaction.like('@Context.Session.GetInt32("CurrentUserid")', '@ViewBag.Tweets[item].TweetId')"></i>
 												</span>
 											}
@@ -106,14 +106,14 @@
 												if (likes.Any(like => like.TweetId == ViewBag.Tweets[item].TweetId)) //giriş yapan kullanıcı o tweeti beğendiyse
 												{
 													<span>
-														<i class="fa-solid fa-heart fs-5 py-1" style="color: rgb(249,24, 128);"
+														<i class="fa-solid fa-heart fs-5 py-2 px-2 likedHover" style="color: rgb(249,24, 128);"
 														   onclick="interaction.unlike('@Context.Session.GetInt32("CurrentUserid")', '@ViewBag.Tweets[item].TweetId')"></i>
 													</span>
 												}
 												else //beğenmediyse
 												{
 													<span>
-														<i class="fa-regular fa-heart fs-5 py-1" style="color: rgb(83, 100, 113);"
+														<i class="fa-regular fa-heart fs-5 py-2 px-2 likedHover"
 														   onclick="interaction.like('@Context.Session.GetInt32("CurrentUserid")', '@ViewBag.Tweets[item].TweetId')"></i>
 													</span>
 												}
@@ -123,11 +123,9 @@
 										</div>
 
 										<div class="col-2">
-											<span><i class="fa-solid fa-arrow-up-from-bracket fs-5 py-1" style="color: rgb(83, 100, 113);"></i></span>
+											<span><i class="fa-solid fa-arrow-up-from-bracket fs-5 py-2 px-2 commentShareHover"></i></span>
 										</div>
-										<div class="col-2">
-											<span></span>
-										</div>
+										
 									</div>
 								</div>
 							</div>
