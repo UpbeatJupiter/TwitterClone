@@ -23,5 +23,15 @@
 		/// tweet ne kadar zaman önce atılmış
 		/// </summary>
 		public string TweetDate { get; set; }
+
+		/// <summary>
+		/// tweetin like sayısı
+		/// </summary>
+		public int LikeCount { get; set; }
+
+		/// <summary>
+		/// tweetin Retweet sayısı
+		/// </summary>
+		public int RetweetCount { get; set; }
 	}
 }

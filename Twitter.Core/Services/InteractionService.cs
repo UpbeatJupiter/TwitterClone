@@ -67,19 +67,43 @@ namespace Twitter.Core.Services
 			return list;
 		}
 
+		public void AddLikeToTweet(int tweetId)
+		{
+			var tweet = _unitOfWork.TweetRepository.GetTweetById(tweetId);
+			tweet.LikeCount++;
+			_unitOfWork.Commit();
+		}
+
+		public void RemoveLikeToTweet(int tweetId)
+		{
+			var tweet = _unitOfWork.TweetRepository.GetTweetById(tweetId);
+			if (tweet != null && tweet.LikeCount > 0)
+			{
+				tweet.LikeCount--;
+				_unitOfWork.Commit();
+			}
+		}
+
+		public int GetLikeCountofTweet(int tweetId)
+		{
+			int count = _unitOfWork.TweetRepository.GetTweetById(tweetId).LikeCount;
+
+			return count;
+		}
+
 
 		/// <summary>
-		/// Tweet repostlandığında user id ve tweet id db ye eklenir
+		/// Tweet retweetlendiğinde user id ve tweet id db ye eklenir
 		/// </summary>
-		/// <param name="userId">tweeti repostlayan kullanıcı id</param>
-		/// <param name="tweetId">repostlanan tweet id</param>
-		public void AddRepostInteraction(int userId, int tweetId)
+		/// <param name="userId">tweeti retweetleyen kullanıcı id</param>
+		/// <param name="tweetId">retweetlenen tweet id</param>
+		public void AddRetweetInteraction(int userId, int tweetId)
 		{
 			var interaction = new Interaction
 			{
 				UserId = userId,
 				TweetId = tweetId,
-				InteractionType = "Repost"
+				InteractionType = "Retweet"
 			};
 
 			_unitOfWork.InteractionRepository.Insert(interaction);
@@ -88,14 +112,14 @@ namespace Twitter.Core.Services
 		}
 
 		/// <summary>
-		/// repost geri çekildiğinde db den silinir
+		/// retweet geri çekildiğinde db den silinir
 		/// </summary>
-		/// <param name="userId">tweet repostunu silen kullanıcı id</param>
-		/// <param name="tweetId">repostu çekilen tweet id</param>
-		public void RemoveRepostInteraction(int userId, int tweetId)
+		/// <param name="userId">tweet retweeti silen kullanıcı id</param>
+		/// <param name="tweetId">retweeti çekilen tweet id</param>
+		public void RemoveRetweetInteraction(int userId, int tweetId)
 		{
 			var interaction = _unitOfWork.InteractionRepository.GetAll()
-				.Where(x => x.InteractionType == "Repost")
+				.Where(x => x.InteractionType == "Retweet")
 				.Where(x => x.UserId == userId)
 				.Where(x => x.TweetId == tweetId)
 				.FirstOrDefault();
@@ -104,9 +128,33 @@ namespace Twitter.Core.Services
 			_unitOfWork.Commit();
 		}
 
-		public List<InteractionDto> GetUserRepostedTweets(int userid)
+		public void AddRetweetToTweet(int tweetId)
 		{
-			var data = _unitOfWork.InteractionRepository.GetAll().Where(x => x.InteractionType == "Repost").Where(x => x.UserId == userid);
+			var tweet = _unitOfWork.TweetRepository.GetTweetById(tweetId);
+			tweet.RetweetCount++;
+			_unitOfWork.Commit();
+		}
+
+		public void RemoveRetweetToTweet(int tweetId)
+		{
+			var tweet = _unitOfWork.TweetRepository.GetTweetById(tweetId);
+			if (tweet != null && tweet.LikeCount > 0)
+			{
+				tweet.RetweetCount--;
+				_unitOfWork.Commit();
+			}
+		}
+
+		public int GetRetweetCountofTweet(int tweetId)
+		{
+			int count = _unitOfWork.TweetRepository.GetTweetById(tweetId).LikeCount;
+
+			return count;
+		}
+
+		public List<InteractionDto> GetUserRetweetedTweets(int userid)
+		{
+			var data = _unitOfWork.InteractionRepository.GetAll().Where(x => x.InteractionType == "Retweet").Where(x => x.UserId == userid);
 			var list = new List<InteractionDto>();
 
 			if (data != null)

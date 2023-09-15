@@ -13,6 +13,10 @@ span {
     border-radius: 50px;
 }
 
+.profileHover:hover {
+    background-color: #a9a9a92b;
+}
+
 .commentShareHover:hover {
     background-color: rgb(29, 155, 240, 0.14);
     color: rgb(29,155,240);
@@ -27,9 +31,15 @@ span {
     transition-duration: 0.4s;
 }
 
-.repostHover:hover {
+.retweetHover:hover {
     background-color: #19875421;
     color: #198754;
+    border-radius: 50%;
+    transition-duration: 0.4s;
+}
+
+.deleteHover:hover {
+    color: red;
     border-radius: 50%;
     transition-duration: 0.4s;
 }
@@ -129,7 +139,7 @@ span {
     justify-content: space-between;
 }
 
-    #whoToFollow .profile:hover, .show-more:hover {
+    #whoToFollow .show-more:hover {
         background-color: var(--secondary-bg);
     }
 

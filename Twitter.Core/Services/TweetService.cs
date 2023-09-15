@@ -25,7 +25,9 @@ namespace Twitter.Core.Services
 				Id = dto.TweetId,
 				TweetContent = dto.TweetContent,
 				TweetDate = DateTime.Now,
-				UserId = dto.UserId
+				UserId = dto.UserId,
+				LikeCount = 0,
+				RetweetCount = 0
 			};
 
 			_unitOfWork.TweetRepository.Insert(tweet);
@@ -63,7 +65,10 @@ namespace Twitter.Core.Services
 					UserId = x.UserId,
 					Username = _unitOfWork.UserRepository.GetUserById(x.UserId).Username,
 					TweetId = x.Id,
-					TweetDate = _unitOfWork.TweetRepository.GetTimeAgo(x.TweetDate)
+					TweetDate = _unitOfWork.TweetRepository.GetTimeAgo(x.TweetDate),
+					LikeCount = x.LikeCount,
+					RetweetCount = x.RetweetCount
+
 				}).ToList();
 			}
 			return list;
@@ -118,7 +123,10 @@ namespace Twitter.Core.Services
 					UserId = x.UserId,
 					Username = _unitOfWork.UserRepository.GetUserById(x.UserId).Username,
 					TweetId = x.Id,
-					TweetDate = _unitOfWork.TweetRepository.GetTimeAgo(x.TweetDate)
+					TweetDate = _unitOfWork.TweetRepository.GetTimeAgo(x.TweetDate),
+					LikeCount = x.LikeCount,
+					RetweetCount = x.RetweetCount
+
 				}).ToList();
 			}
 			return list;
@@ -136,7 +144,9 @@ namespace Twitter.Core.Services
 					UserId = x.UserId,
 					Username = _unitOfWork.UserRepository.GetUserById(x.UserId).Username,
 					TweetId = x.Id,
-					TweetDate = x.TweetDate.ToString("MM-yyyy")
+					TweetDate = x.TweetDate.ToString("MM-yyyy"),
+					LikeCount = x.LikeCount,
+					RetweetCount = x.RetweetCount
 				}).ToList();
 			}
 			return list;
@@ -191,7 +201,9 @@ namespace Twitter.Core.Services
 				UserId = tweetEntity.UserId,
 				TweetId = tweetEntity.Id,
 				TweetContent = tweetEntity.TweetContent,
-				TweetDate = tweetEntity.TweetDate.ToString()
+				TweetDate = tweetEntity.TweetDate.ToString(),
+				LikeCount = tweetEntity.LikeCount,
+				RetweetCount = tweetEntity.RetweetCount
 			};
 		}
 

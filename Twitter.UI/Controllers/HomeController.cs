@@ -627,7 +627,8 @@ namespace Twitter.UI.Controllers
 				List<TweetDto> followedUserTweets = tweetService.GetFollowedTweets(dto.UserId);
 
 				ViewBag.Like = interactionService.GetUserLikedTweets(dto.UserId).ToList();
-				ViewBag.Repost = interactionService.GetUserRepostedTweets(dto.UserId).ToList();
+
+				ViewBag.Retweet = interactionService.GetUserRetweetedTweets(dto.UserId).ToList();
 
 				#region Session
 
@@ -653,7 +654,7 @@ namespace Twitter.UI.Controllers
 					//takip edilen kullanıcı varsa onların userid listesi = null
 					ViewBag.FollowedUserList = followedUserTweets.Select(x => x.UserId).ToList();
 					ViewBag.Like = interactionService.GetUserLikedTweets(dto.UserId).ToList();
-					ViewBag.Repost = interactionService.GetUserRepostedTweets(dto.UserId).ToList();
+					ViewBag.Retweet = interactionService.GetUserRetweetedTweets(dto.UserId).ToList();
 				}
 				else //giriş yapan kullanıcının takip ettiği kullanıcılar varsa
 				{
@@ -791,6 +792,8 @@ namespace Twitter.UI.Controllers
 
 				interactionService.AddLikeInteraction(userid, tweetid);
 
+				interactionService.AddLikeToTweet(tweetid);
+
 				return Json(true);
 			}
 			return Json(false);
@@ -808,22 +811,7 @@ namespace Twitter.UI.Controllers
 
 				interactionService.RemoveLikeInteraction(userid, tweetid);
 
-				return Json(true);
-			}
-			return Json(false);
-		}
-		#endregion
-
-		#region Repost Tweet
-
-		[HttpPost]
-		public JsonResult RepostTweet(int userid, int tweetid)
-		{
-			if (userid != 0 && tweetid != 0)
-			{
-				InteractionService interactionService = new InteractionService();
-
-				interactionService.AddRepostInteraction(userid, tweetid);
+				interactionService.RemoveLikeToTweet(tweetid);
 
 				return Json(true);
 			}
@@ -831,16 +819,37 @@ namespace Twitter.UI.Controllers
 		}
 		#endregion
 
-		#region UnRepost Tweet
+		#region Retweet Tweet
 
 		[HttpPost]
-		public JsonResult UnrepostTweet(int userid, int tweetid)
+		public JsonResult RetweetTweet(int userid, int tweetid)
 		{
 			if (userid != 0 && tweetid != 0)
 			{
 				InteractionService interactionService = new InteractionService();
 
-				interactionService.RemoveRepostInteraction(userid, tweetid);
+				interactionService.AddRetweetInteraction(userid, tweetid);
+
+				interactionService.AddRetweetToTweet(tweetid);	
+
+				return Json(true);
+			}
+			return Json(false);
+		}
+		#endregion
+
+		#region UnRetweet Tweet
+
+		[HttpPost]
+		public JsonResult UnRetweetTweet(int userid, int tweetid)
+		{
+			if (userid != 0 && tweetid != 0)
+			{
+				InteractionService interactionService = new InteractionService();
+
+				interactionService.RemoveRetweetInteraction(userid, tweetid);
+
+				interactionService.RemoveRetweetToTweet(tweetid);
 
 				return Json(true);
 			}
@@ -890,7 +899,7 @@ namespace Twitter.UI.Controllers
 			ViewBag.Username = usernameList;
 			int myuserid = myTweetList.Select(x => x.UserId).FirstOrDefault();
 			ViewBag.Like = interactionService.GetUserLikedTweets(myuserid).ToList();
-			ViewBag.Repost = interactionService.GetUserRepostedTweets(myuserid).ToList();
+			ViewBag.Retweet = interactionService.GetUserRetweetedTweets(myuserid).ToList();
 		}
 		#endregion
 

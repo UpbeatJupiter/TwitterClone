@@ -33,11 +33,11 @@
         );
     },
 
-    repost: function (userid, tweetid) {
+    retweet: function (userid, tweetid) {
         var id = tweetid;
         var uid = userid;
 
-        $.post("/Home/RepostTweet",
+        $.post("/Home/RetweetTweet",
             {
                 userid: uid,
                 tweetid: id
@@ -48,11 +48,11 @@
         );
     },
 
-    unrepost: function (userid, tweetid) {
+    unretweet: function (userid, tweetid) {
         var id = tweetid;
         var uid = userid;
 
-        $.post("/Home/UnrepostTweet",
+        $.post("/Home/UnRetweetTweet",
             {
                 userid: uid,
                 tweetid: id

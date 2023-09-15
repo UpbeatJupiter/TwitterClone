@@ -25,6 +25,16 @@ namespace Twitter.Data.Entities
 		/// </summary>
 		public DateTime TweetDate { get; set; }
 
+		/// <summary>
+		/// tweetin like sayısı
+		/// </summary>
+		public int LikeCount { get; set; }
+
+		/// <summary>
+		/// tweetin Retweet sayısı
+		/// </summary>
+		public int RetweetCount { get; set; }
+
 		public ICollection<Interaction> Interactions { get; set; }
 	}
 }

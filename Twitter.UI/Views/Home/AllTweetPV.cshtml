@@ -5,7 +5,7 @@
 	Layout = null;
 	ViewData["Title"] = "Home Page";
 	List<InteractionDto> likes = ViewBag.Like as List<InteractionDto>;
-	List<InteractionDto> reposts = ViewBag.Repost as List<InteractionDto>;
+	List<InteractionDto> retweets = ViewBag.Retweet as List<InteractionDto>;
 }
 @if (ViewBag.Tweets != null)
 {
@@ -42,13 +42,13 @@
 									@if (Context.Session.GetInt32("CurrentUserid").Value == ViewBag.Tweets[item].UserId)
 									{
 										<span>
-											<i class="fa-solid fa-xmark fs-5 py-1" style="color: rgb(83, 100, 113);"
+											<i class="fa-solid fa-xmark fs-5 py-2 px-2 deleteHover"
 											   onclick="deleteTweet.deleteTweet('@ViewBag.Tweets[item].TweetId','@ViewBag.Tweets[item].UserId')"></i>
 										</span>
 									}
 									else
 									{
-										<span><i class="fa-solid fa-ellipsis fs-5 py-1" style="color: rgb(83, 100, 113);"></i></span>
+										<span><i class="fa-solid fa-ellipsis fs-5 py-2 px-2 commentShareHover"></i></span>
 									}
 								</div>
 							</div>
@@ -67,27 +67,30 @@
 											<span><i class="fa-regular fa-comment fs-5 py-2 px-2 commentShareHover"></i></span>
 										</div>
 										<div class="col-2">
-											@if (ViewBag.Repost.Count == 0)
+											@if (ViewBag.Retweet.Count == 0)
 											{
 												<span>
-													<i class="fa-solid fa-retweet fs-5 py-2 px-2 repostHover"
-													   onclick="interaction.repost('@Context.Session.GetInt32("CurrentUserid")', '@ViewBag.Tweets[item].TweetId')"></i>
+													<i class="fa-solid fa-retweet fs-5 py-2 px-2 retweetHover"
+													   onclick="interaction.retweet('@Context.Session.GetInt32("CurrentUserid")', '@ViewBag.Tweets[item].TweetId')"></i>
+													@ViewBag.Tweets[item].RetweetCount
 												</span>
 											}
 											else
 											{
-												if (reposts.Any(reposts => reposts.TweetId == ViewBag.Tweets[item].TweetId)) //giriş yapan kullanıcı o tweeti repostladıysa
+												if (retweets.Any(retweet => retweet.TweetId == ViewBag.Tweets[item].TweetId)) //giriş yapan kullanıcı o tweeti retweetladıysa
 												{
 													<span>
-														<i class="fa-solid fa-retweet fs-5 py-2 px-2 repostHover" style="color: rgb(0, 186, 124);"
-														   onclick="interaction.unrepost('@Context.Session.GetInt32("CurrentUserid")', '@ViewBag.Tweets[item].TweetId')"></i>
+														<i class="fa-solid fa-retweet fs-5 py-2 px-2 retweetHover" style="color: rgb(0, 186, 124);"
+														   onclick="interaction.unretweet('@Context.Session.GetInt32("CurrentUserid")', '@ViewBag.Tweets[item].TweetId')"></i>
+														@ViewBag.Tweets[item].RetweetCount
 													</span>
 												}
-												else //repostlamadıysa
+												else //retweetlamadıysa
 												{
 													<span>
-														<i class="fa-solid fa-retweet fs-5 py-2 px-2 repostHover" 
-														   onclick="interaction.repost('@Context.Session.GetInt32("CurrentUserid")', '@ViewBag.Tweets[item].TweetId')"></i>
+														<i class="fa-solid fa-retweet fs-5 py-2 px-2 retweetHover"
+														   onclick="interaction.retweet('@Context.Session.GetInt32("CurrentUserid")', '@ViewBag.Tweets[item].TweetId')"></i>
+														@ViewBag.Tweets[item].RetweetCount
 													</span>
 												}
 
@@ -99,6 +102,7 @@
 												<span>
 													<i class="fa-regular fa-heart fs-5 py-2 px-2 likedHover"
 													   onclick="interaction.like('@Context.Session.GetInt32("CurrentUserid")', '@ViewBag.Tweets[item].TweetId')"></i>
+													@ViewBag.Tweets[item].LikeCount
 												</span>
 											}
 											else
@@ -108,6 +112,7 @@
 													<span>
 														<i class="fa-solid fa-heart fs-5 py-2 px-2 likedHover" style="color: rgb(249,24, 128);"
 														   onclick="interaction.unlike('@Context.Session.GetInt32("CurrentUserid")', '@ViewBag.Tweets[item].TweetId')"></i>
+														@ViewBag.Tweets[item].LikeCount
 													</span>
 												}
 												else //beğenmediyse
@@ -115,6 +120,7 @@
 													<span>
 														<i class="fa-regular fa-heart fs-5 py-2 px-2 likedHover"
 														   onclick="interaction.like('@Context.Session.GetInt32("CurrentUserid")', '@ViewBag.Tweets[item].TweetId')"></i>
+														@ViewBag.Tweets[item].LikeCount
 													</span>
 												}
 
