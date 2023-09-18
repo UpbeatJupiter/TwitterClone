@@ -69,7 +69,7 @@
 										<div class="col-2">
 											@if (ViewBag.Retweet.Count == 0)
 											{
-												<span>
+												<span style="font-size: 15px;">
 													<i class="fa-solid fa-retweet fs-5 py-2 px-2 retweetHover"
 													   onclick="interaction.retweet('@Context.Session.GetInt32("CurrentUserid")', '@ViewBag.Tweets[item].TweetId')"></i>
 													@ViewBag.Tweets[item].RetweetCount
@@ -79,7 +79,7 @@
 											{
 												if (retweets.Any(retweet => retweet.TweetId == ViewBag.Tweets[item].TweetId)) //giriş yapan kullanıcı o tweeti retweetladıysa
 												{
-													<span>
+													<span style="font-size: 15px;">
 														<i class="fa-solid fa-retweet fs-5 py-2 px-2 retweetHover" style="color: rgb(0, 186, 124);"
 														   onclick="interaction.unretweet('@Context.Session.GetInt32("CurrentUserid")', '@ViewBag.Tweets[item].TweetId')"></i>
 														@ViewBag.Tweets[item].RetweetCount
@@ -87,7 +87,7 @@
 												}
 												else //retweetlamadıysa
 												{
-													<span>
+													<span style="font-size: 15px;">
 														<i class="fa-solid fa-retweet fs-5 py-2 px-2 retweetHover"
 														   onclick="interaction.retweet('@Context.Session.GetInt32("CurrentUserid")', '@ViewBag.Tweets[item].TweetId')"></i>
 														@ViewBag.Tweets[item].RetweetCount
@@ -99,7 +99,7 @@
 										<div class="col-2">
 											@if (ViewBag.Like.Count == 0)
 											{
-												<span>
+												<span style="font-size: 15px;">
 													<i class="fa-regular fa-heart fs-5 py-2 px-2 likedHover"
 													   onclick="interaction.like('@Context.Session.GetInt32("CurrentUserid")', '@ViewBag.Tweets[item].TweetId')"></i>
 													@ViewBag.Tweets[item].LikeCount
@@ -109,7 +109,7 @@
 											{
 												if (likes.Any(like => like.TweetId == ViewBag.Tweets[item].TweetId)) //giriş yapan kullanıcı o tweeti beğendiyse
 												{
-													<span>
+													<span style="font-size: 15px;">
 														<i class="fa-solid fa-heart fs-5 py-2 px-2 likedHover" style="color: rgb(249,24, 128);"
 														   onclick="interaction.unlike('@Context.Session.GetInt32("CurrentUserid")', '@ViewBag.Tweets[item].TweetId')"></i>
 														@ViewBag.Tweets[item].LikeCount
@@ -117,7 +117,7 @@
 												}
 												else //beğenmediyse
 												{
-													<span>
+													<span style="font-size: 15px;">
 														<i class="fa-regular fa-heart fs-5 py-2 px-2 likedHover"
 														   onclick="interaction.like('@Context.Session.GetInt32("CurrentUserid")', '@ViewBag.Tweets[item].TweetId')"></i>
 														@ViewBag.Tweets[item].LikeCount
