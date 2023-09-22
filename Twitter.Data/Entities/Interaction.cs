@@ -19,6 +19,8 @@ namespace Twitter.Data.Entities
 		public int UserId { get; set; }
 		public User User { get; set; }
 
+		public string Username { get; set; }
+
 		/// <summary>
 		/// hangi tweet beğenildi
 		/// </summary>

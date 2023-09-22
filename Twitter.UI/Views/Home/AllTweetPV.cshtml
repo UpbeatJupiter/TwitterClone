@@ -7,6 +7,7 @@
 	List<InteractionDto> likes = ViewBag.Like as List<InteractionDto>;
 	List<InteractionDto> retweets = ViewBag.Retweet as List<InteractionDto>;
 	List<TweetDto> retweetedTweets = ViewBag.FollowedRetweetList as List<TweetDto>;
+	
 }
 @if (ViewBag.Tweets != null)
 {
@@ -16,14 +17,24 @@
 			@*retweet*@
 			@if (retweetedTweets.Any(x => x.TweetId == ViewBag.Tweets[item].TweetId))
 			{
-				<div style="color:rgb(139, 152, 165);">
+				foreach (var x in retweetedTweets)
+				{
+					if (x.TweetId == ViewBag.Tweets[item].TweetId)
+					{
+						<div style="color:rgb(139, 152, 165);">
 
-					<span style="font-size:13px;">
-						<i class="fa-solid fa-retweet" style="font-size: 16px;"></i>
-						@ViewBag.Tweets[item].Username
-					</span>
-					<span style="font-size:16px;">retweeted</span>
-				</div>
+							<span style="font-size:16px;">
+								<i class="fa-solid fa-retweet"></i>
+								@if (ViewBag.RetweetUsername[item].TweetId == x.TweetId)
+								{
+									@ViewBag.RetweetUsername[item].Username
+								}
+							</span>
+							<span style="font-size:16px;">retweeted</span>
+						</div>
+					}
+				}
+				
 			}
 			<div class="row">
 				<div class="col-xs-4 col-md-2 py-2">
@@ -90,7 +101,7 @@
 											}
 											else
 											{
-												if (retweets.Any(retweet => retweet.TweetId == ViewBag.Tweets[item].TweetId)) //giriş yapan kullanıcı o tweeti retweetladıysa
+												if (retweets.Any(retweet => retweet.TweetId == ViewBag.Tweets[item].TweetId)) //giriş yapan kullanıcı o tweeti retweetlediyse
 												{
 													<span style="font-size: 15px;">
 														<i class="fa-solid fa-retweet fs-5 py-2 px-2 retweetHover" style="color: rgb(0, 186, 124);"
@@ -98,7 +109,7 @@
 														@ViewBag.Tweets[item].RetweetCount
 													</span>
 												}
-												else //retweetlamadıysa
+												else //retweetlemediyse
 												{
 													<span style="font-size: 15px;">
 														<i class="fa-solid fa-retweet fs-5 py-2 px-2 retweetHover"

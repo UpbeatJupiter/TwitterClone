@@ -1,4 +1,5 @@
-﻿using Microsoft.Kiota.Abstractions;
+﻿using Microsoft.Graph.Models;
+using Microsoft.Kiota.Abstractions;
 using Twitter.Core.Dtos;
 using Twitter.Data.Entities;
 using Twitter.Data.UnitOfWork;
@@ -24,6 +25,7 @@ namespace Twitter.Core.Services
 			var interaction = new Interaction
 			{
 				UserId = userId,
+				Username = _unitOfWork.UserRepository.GetUserById(userId).Username,
 				TweetId = tweetId,
 				InteractionType = "Like"
 			};
@@ -61,6 +63,7 @@ namespace Twitter.Core.Services
 				{
 					Id = x.InteractionId,
 					UserId = x.UserId,
+					Username = _unitOfWork.UserRepository.GetUserById(x.UserId).Username,
 					TweetId = x.TweetId,
 					InteractionType = x.InteractionType
 				}).ToList();
@@ -103,6 +106,7 @@ namespace Twitter.Core.Services
 			var interaction = new Interaction
 			{
 				UserId = userId,
+				Username = _unitOfWork.UserRepository.GetUserById(userId).Username,
 				TweetId = tweetId,
 				InteractionType = "Retweet"
 			};
@@ -164,6 +168,7 @@ namespace Twitter.Core.Services
 				{
 					Id = x.InteractionId,
 					UserId = x.UserId,
+					Username = _unitOfWork.UserRepository.GetUserById(x.UserId).Username,
 					TweetId = x.TweetId,
 					InteractionType = x.InteractionType
 				}).ToList();
@@ -193,5 +198,28 @@ namespace Twitter.Core.Services
 
 			return list;
 		}
+
+		public InteractionDto GetInteractionRetweet(int userId)
+		{
+			var data = _unitOfWork.InteractionRepository.GetAll().Where(x => x.InteractionType == "Retweet")
+				.Where(x => x.UserId == userId).FirstOrDefault();
+
+			var dataDto = new InteractionDto();
+
+			if (data != null)
+			{
+				dataDto = new InteractionDto
+				{
+					Id = data.InteractionId,
+					UserId = data.UserId,
+					Username = _unitOfWork.UserRepository.GetUserById(data.UserId).Username,
+					TweetId = data.TweetId,
+					InteractionType = data.InteractionType
+				};
+				
+			}
+			return dataDto;
+		}
+
 	}
 }

@@ -200,8 +200,9 @@ namespace Twitter.Core.Services
 			{
 				UserId = tweetEntity.UserId,
 				TweetId = tweetEntity.Id,
+				Username = _unitOfWork.UserRepository.GetUserById(tweetEntity.UserId).Username,
 				TweetContent = tweetEntity.TweetContent,
-				TweetDate = tweetEntity.TweetDate.ToString(),
+				TweetDate = _unitOfWork.TweetRepository.GetTimeAgo(tweetEntity.TweetDate),
 				LikeCount = tweetEntity.LikeCount,
 				RetweetCount = tweetEntity.RetweetCount
 			};

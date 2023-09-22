@@ -7,6 +7,7 @@ using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NonFactors.Mvc.Grid;
+using NuGet.Packaging;
 using OfficeOpenXml;
 using QRCoder;
 using System.Diagnostics;
@@ -669,6 +670,10 @@ namespace Twitter.UI.Controllers
 
 					//retweetlenenleri alltweetliste ekle
 					TweetsAndRetweets(alltweets, followedUsersRetweetsList, userService, interactionService);
+
+					ViewBag.RetweetUsername = Retweetinteractions(dto.UserId);
+
+
 				}
 				return View("HomePage", dto);
 			}
@@ -888,6 +893,10 @@ namespace Twitter.UI.Controllers
 				tweets.AddRange(myTweetList);
 			}
 
+			int myuserid = myTweetList.Select(x => x.UserId).FirstOrDefault();
+
+			ViewBag.Like = interactionService.GetUserLikedTweets(myuserid).ToList();
+			ViewBag.Retweet = interactionService.GetUserRetweetedTweets(myuserid).ToList();
 
 			return tweets;
 		}
@@ -906,8 +915,26 @@ namespace Twitter.UI.Controllers
 
 			foreach (var item in followedUserList)
 			{
-				list.AddRange(interactionService.GetFollowedUsersRetweets(item));	
+				list.AddRange(interactionService.GetFollowedUsersRetweets(item));
 			}
+
+
+			return list;
+		}
+
+		public List<InteractionDto> Retweetinteractions(int userId)
+		{
+			InteractionService interactionService = new InteractionService();
+			FollowService followService = new FollowService();
+
+			var followedUserList = followService.GetFollowedUsers(userId).ToList(); //kullanıcının takip ettiği kullanıcıların id listesi
+			List<InteractionDto> list = new List<InteractionDto>();
+
+			foreach (var item in followedUserList)
+			{
+				list.Add(interactionService.GetInteractionRetweet(item));
+			}
+
 
 			return list;
 		}
@@ -945,11 +972,10 @@ namespace Twitter.UI.Controllers
 
 			ViewBag.Username = usernameList;
 
-			int myuserid = allTweetList.Select(x => x.UserId).FirstOrDefault();
-
-			ViewBag.Like = interactionService.GetUserLikedTweets(myuserid).ToList();
-			ViewBag.Retweet = interactionService.GetUserRetweetedTweets(myuserid).ToList();
+			
 			ViewBag.FollowedRetweetList = retweetList;
+
+			
 		}
 
 		#endregion

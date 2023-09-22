@@ -9,6 +9,8 @@
 		/// </summary>
 		public int UserId { get; set; }
 
+		public string Username { get; set; }
+
 		/// <summary>
 		/// hangi tweet beğenildi
 		/// </summary>
