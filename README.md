@@ -13,7 +13,6 @@ This application is a simple Twitter clone built using ASP.NET MVC and C#. It al
 
 ![Banner](image.png)
 
-
 ## Contact
 
 If you have any questions, feedback, or would like to connect, feel free to reach out to me.
