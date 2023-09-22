@@ -15,6 +15,7 @@
 	{
 		<div class="col-12">
 			@*retweet*@
+			@if (retweetedTweets != null && retweets != null && likes != null && ViewBag.RetweetUsername != null)
 			@if (retweetedTweets.Any(x => x.TweetId == ViewBag.Tweets[item].TweetId))
 			{
 				foreach (var x in retweetedTweets)
