@@ -136,5 +136,20 @@ namespace Twitter.Core.Services
 			return count;
 		}
 
+		/// <summary>
+		/// kullanıcının takip ettiği kullanıcı id listesini getirr
+		/// </summary>
+		/// <param name="id">giriş yapmış olan kullanıcı</param>
+		/// <returns>takip ettiği kullanıcı listesi</returns>
+		public List<int> GetFollowedUsers(int id)
+		{
+			var list = _unitOfWork.FollowRepository.GetAll()
+				.Where(x => x.FollowingUserId == id)
+				.Select(x => x.FollowedUserId)
+				.ToList();
+
+			return list;
+		}
+
 	}
 }

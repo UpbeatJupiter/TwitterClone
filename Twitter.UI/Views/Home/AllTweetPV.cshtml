@@ -6,12 +6,25 @@
 	ViewData["Title"] = "Home Page";
 	List<InteractionDto> likes = ViewBag.Like as List<InteractionDto>;
 	List<InteractionDto> retweets = ViewBag.Retweet as List<InteractionDto>;
+	List<TweetDto> retweetedTweets = ViewBag.FollowedRetweetList as List<TweetDto>;
 }
 @if (ViewBag.Tweets != null)
 {
 	for (int item = 0; item < ViewBag.TweetsTotal; item++)
 	{
 		<div class="col-12">
+			@*retweet*@
+			@if (retweetedTweets.Any(x => x.TweetId == ViewBag.Tweets[item].TweetId))
+			{
+				<div style="color:rgb(139, 152, 165);">
+
+					<span style="font-size:13px;">
+						<i class="fa-solid fa-retweet" style="font-size: 16px;"></i>
+						@ViewBag.Tweets[item].Username
+					</span>
+					<span style="font-size:16px;">retweeted</span>
+				</div>
+			}
 			<div class="row">
 				<div class="col-xs-4 col-md-2 py-2">
 					<div class="flex-shrink-0" style="width: 75%;max-width: 100px;">
@@ -131,7 +144,7 @@
 										<div class="col-2">
 											<span><i class="fa-solid fa-arrow-up-from-bracket fs-5 py-2 px-2 commentShareHover"></i></span>
 										</div>
-										
+
 									</div>
 								</div>
 							</div>

@@ -1,4 +1,5 @@
-﻿using Twitter.Core.Dtos;
+﻿using Microsoft.Kiota.Abstractions;
+using Twitter.Core.Dtos;
 using Twitter.Data.Entities;
 using Twitter.Data.UnitOfWork;
 
@@ -167,6 +168,29 @@ namespace Twitter.Core.Services
 					InteractionType = x.InteractionType
 				}).ToList();
 			}
+			return list;
+		}
+
+		/// <summary>
+		/// Kullanıcının retweetlediği tweetleri getirir
+		/// </summary>
+		/// <param name="userId"></param>
+		/// <returns></returns>
+		public List<TweetDto> GetFollowedUsersRetweets(int userId)
+		{
+			// tweet id
+			var data = _unitOfWork.InteractionRepository.GetAll().Where(x => x.InteractionType == "Retweet")
+				.Where(x => x.UserId == userId).Select(x => x.TweetId);
+
+			TweetService tweetService = new TweetService();
+
+			var list = new List<TweetDto>();
+
+			foreach (var item in data)
+			{
+				list.Add(tweetService.GetTweetById(item));
+			}
+
 			return list;
 		}
 	}

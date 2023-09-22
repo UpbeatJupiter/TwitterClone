@@ -653,15 +653,22 @@ namespace Twitter.UI.Controllers
 
 					//takip edilen kullanıcı varsa onların userid listesi = null
 					ViewBag.FollowedUserList = followedUserTweets.Select(x => x.UserId).ToList();
-					ViewBag.Like = interactionService.GetUserLikedTweets(dto.UserId).ToList();
-					ViewBag.Retweet = interactionService.GetUserRetweetedTweets(dto.UserId).ToList();
+					ViewBag.Like = interactionService.GetUserLikedTweets(dto.UserId).ToList(); //Kullanıcının likeladıklarını getirir
+					ViewBag.Retweet = interactionService.GetUserRetweetedTweets(dto.UserId).ToList();//kullanıcının retweetlediklerini getirir
+
 				}
 				else //giriş yapan kullanıcının takip ettiği kullanıcılar varsa
 				{
-					ListOfTweetsMethod(tweetList, followedUserTweets, userService, interactionService);
+					var alltweets = ListOfTweetsMethod(tweetList, followedUserTweets, userService, interactionService);
 
 					//takip edilen kullanıcıların userid listesi
 					ViewBag.FollowedUserList = followedUserTweets.Select(x => x.UserId).ToList();
+
+					// takip edilen kullanıcıların retweelediği tweetler listesi
+					var followedUsersRetweetsList = ReTweets(dto.UserId);
+
+					//retweetlenenleri alltweetliste ekle
+					TweetsAndRetweets(alltweets, followedUsersRetweetsList, userService, interactionService);
 				}
 				return View("HomePage", dto);
 			}
@@ -865,7 +872,7 @@ namespace Twitter.UI.Controllers
 		/// <param name="followedList"></param>
 		/// <param name="userService"></param>
 		/// <param name="dto"></param>
-		public void ListOfTweetsMethod(List<TweetDto> myTweetList, List<TweetDto> myFollowedList, UserService userService, InteractionService interactionService)
+		public List<TweetDto> ListOfTweetsMethod(List<TweetDto> myTweetList, List<TweetDto> myFollowedList, UserService userService, InteractionService interactionService)
 		{
 			List<TweetDto> tweets = new List<TweetDto>();
 
@@ -881,9 +888,49 @@ namespace Twitter.UI.Controllers
 				tweets.AddRange(myTweetList);
 			}
 
+
+			return tweets;
+		}
+		#endregion
+
+		#region Retweet 
+
+		// kullanıcının takip ettiklerinin repostladığı listi versin
+		public List<TweetDto> ReTweets(int userId)
+		{
+			InteractionService interactionService = new InteractionService();
+			FollowService followService = new FollowService();
+
+			var followedUserList = followService.GetFollowedUsers(userId).ToList(); //kullanıcının takip ettiği kullanıcıların id listesi
+			List<TweetDto> list = new List<TweetDto>();
+
+			foreach (var item in followedUserList)
+			{
+				list.AddRange(interactionService.GetFollowedUsersRetweets(item));	
+			}
+
+			return list;
+		}
+
+		public void TweetsAndRetweets(List<TweetDto> allTweetList, List<TweetDto> retweetList, UserService userService, InteractionService interactionService)
+		{
+			List<TweetDto> tweets = new List<TweetDto>();
+
+			
+			if (retweetList != null)
+			{
+				tweets.AddRange(retweetList);
+			}
+
+
+			if (allTweetList != null)
+			{
+				tweets.AddRange(allTweetList);
+			}
+
 			ViewBag.Tweets = tweets.OrderByDescending(x => x.TweetId).ToList();
 			ViewBag.TweetsTotal = tweets.Count();
-			ViewBag.Followed = myFollowedList;
+			ViewBag.Followed = retweetList;
 
 			//giriş yapan ve takip edilen kullanıcıların userid listesi
 			List<int> userIdList = tweets.Select(x => x.UserId).ToList();
@@ -897,10 +944,14 @@ namespace Twitter.UI.Controllers
 			}
 
 			ViewBag.Username = usernameList;
-			int myuserid = myTweetList.Select(x => x.UserId).FirstOrDefault();
+
+			int myuserid = allTweetList.Select(x => x.UserId).FirstOrDefault();
+
 			ViewBag.Like = interactionService.GetUserLikedTweets(myuserid).ToList();
 			ViewBag.Retweet = interactionService.GetUserRetweetedTweets(myuserid).ToList();
+			ViewBag.FollowedRetweetList = retweetList;
 		}
+
 		#endregion
 
 		#region Write To Google Sheets
